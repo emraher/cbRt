@@ -80,7 +80,7 @@
 #' includes ND terms. If \code{nd} is set to TRUE, all NDs are converted to
 #' NAs.
 #'
-#'@param as Type of data to return
+#' @param as Type of data to return
 #'
 #' @return
 #' Argument \code{as} can be set to either \code{tibble}, \code{tibbletime},
@@ -104,55 +104,55 @@ cbRt_get <- function(series,
                      formulas = NULL,
                      freq = NULL,
                      nd = TRUE,
-                     as = c("tibble", "tibbletime", "data.frame", "data.table")){
+                     as = c("tibble", "tibbletime", "data.frame", "data.table")) {
+  url <- cbRt_url(series, startDate, endDate, token, aggregationTypes, formulas, freq)
+  res <- cbRt_geturl(url)
 
-    url <- cbRt_url(series, startDate, endDate, token, aggregationTypes, formulas, freq)
-    res <- cbRt_geturl(url)
+  # Check response
+  if (res$status_code != 200) {
+    stop("Bad Request, Error: ", res$status_code)
+  }
 
-    # Check response
-    if (res$status_code != 200) {
-      stop("Bad Request, Error: ", res$status_code)
-    }
+  # Read contents
+  res_json <- httr::content(res, as = "raw", encoding = "UTF-8")
+  res_json <- rawToChar(res_json)
 
-    # Read contents
-    res_json <- httr::content(res, as = "raw", encoding = "UTF-8")
-    res_json <- rawToChar(res_json)
+  # Extract data
+  res_df <- jsonlite::fromJSON(res_json)
+  df <- res_df[2]$items
 
-    # Extract data
-    res_df <- jsonlite::fromJSON(res_json)
-    df <- res_df[2]$items
+  # Fix dates
+  if ("Tarih" %in% colnames(df)) df$Tarih <- NULL
+  if ("UNIXTIME" %in% colnames(df)) {
+    df <- within(df, {
+      UNIXTIME <- anytime::anydate(as.numeric(df$UNIXTIME$`$numberLong`))
+    })
+  }
+  names(df)[names(df) == "UNIXTIME"] <- "Date"
 
-    # Fix dates
-    if ("Tarih" %in% colnames(df)) df$Tarih <- NULL
-    if ("UNIXTIME" %in% colnames(df)) {
-      df <- within(df, {UNIXTIME <- anytime::anydate(as.numeric(df$UNIXTIME$`$numberLong`))})
-    }
-    names(df)[names(df) == "UNIXTIME"] <- "Date"
+  # Reorder columns
+  # https://stackoverflow.com/a/39449541
+  # https://stackoverflow.com/users/6822273/ht-079
+  df <- df[, c(which(colnames(df) == "Date"), which(colnames(df) != "Date"))]
 
-    # Reorder columns
-    # https://stackoverflow.com/a/39449541
-    # https://stackoverflow.com/users/6822273/ht-079
-    df <- df[, c(which(colnames(df) == "Date"), which(colnames(df) != "Date"))]
+  # Convert ND
 
-    # Convert ND
+  if (nd == TRUE) {
+    df[-1] <- lapply(df[-1], function(x) suppressWarnings(as.numeric(x)))
+  }
 
-    if (nd == TRUE) {df[-1] <- lapply(df[-1], function(x) suppressWarnings(as.numeric(x)))}
+  # Output data class
+  as <- match.arg(as)
 
-    # Output data class
-    as <- match.arg(as)
+  if (as == "tibbletime") {
+    df <- tibbletime::as_tbl_time(df, index = "Date")
+  } else if (as == "data.frame") {
+    df
+  } else if (as == "data.table") {
+    df <- data.table::as.data.table(df)
+  } else {
+    df <- tibble::as_tibble(df)
+  }
 
-    if (as == "tibbletime") {
-      df <- tibbletime::as_tbl_time(df, index = "Date")
-    } else if (as == "data.frame") {
-      df
-    } else if (as == "data.table") {
-      df <- data.table::as.data.table(df)
-    } else {
-      df <- tibble::as_tibble(df)
-    }
-
-    return(df)
-
-    }
-
-
+  return(df)
+}
