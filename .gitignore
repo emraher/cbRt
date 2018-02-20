@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+inst/doc
+*.Rproj
+.DS_Store
+cran-comments.md
+mytests/
+cache/
+README_cache/
+/inst
+/revdep
+/vignettes
+codemeta.json
+cran-comments.md
+ropensci-issue.md
+token

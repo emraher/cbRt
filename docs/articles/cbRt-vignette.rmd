@@ -1,0 +1,30 @@
+---
+title: "The cbRt Package Vignette"
+author: "Emrah Er"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    self_contained: yes
+    toc: true    
+---
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{The cbRt Package Vignette}
+-->
+
+# Introduction
+
+
+
+# Installing the Package.
+
+The package is available from GitHub and will be uploaded to CRAN
+shortly. If you wish to install the development version then install the
+[devtools package](https://CRAN.R-project.org/package=devtools), available
+from CRAN.
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
+#install.packages("devtools")
+devtools::install_github("emraher/cbRt")
+```
+
