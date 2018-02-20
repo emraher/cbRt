@@ -10,7 +10,7 @@ public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus
 [![Linux Build
 Status](https://travis-ci.org/emraher/cbRt.svg?branch=master)](https://travis-ci.org/emraher/cbRt)
 [![Windows Build
-status](https://ci.appveyor.com/api/projects/status/4ejevtp69fcrr31o?svg=true)](https://ci.appveyor.com/project/emraher/cbRt)
+status](https://ci.appveyor.com/api/projects/status/i4g4anmhv22t959x?svg=true)](https://ci.appveyor.com/project/emraher/cbRt)
 [![](http://www.r-pkg.org/badges/version/cbRt)](http://www.r-pkg.org/pkg/cbRt)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/cbRt)](http://www.r-pkg.org/pkg/cbRt)

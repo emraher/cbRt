@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Citation and Authors • cbRt</title>
+<title>Tidy eval helpers — tidyeval • cbRt</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -20,9 +20,9 @@
 
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script>
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
+<script src="../pkgdown.js"></script>
   
   
 <!-- mathjax -->
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-citation-authors">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -47,18 +47,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">cbRt</a>
+      <a class="navbar-brand" href="../index.html">cbRt</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -68,10 +68,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="articles/cbRt-vignette.html">The cbRt Package Vignette</a>
+      <a href="../articles/cbRt-vignette.html">The cbRt Package Vignette</a>
     </li>
     <li>
-      <a href="articles/readme.html">Vignette Title</a>
+      <a href="../articles/readme.html">Vignette Title</a>
     </li>
   </ul>
 </li>
@@ -93,35 +93,29 @@
       </header>
 
       <div class="row">
-  <div class="contents col-md-9">
-
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Citation</h1>
+    <h1>Tidy eval helpers</h1>
     </div>
 
-    <p>Er E (????).
-&ldquo;cbRt: An R client for the CBRT.&rdquo; 
-</p>
-    <pre>@Misc{,
-  title = {cbRt: An R client for the CBRT},
-  author = {Emrah Er},
-  journal = {Journal of Open Open Source Software},
-}</pre>
-    <div class="page-header">
-      <h1>Authors</h1>
-    </div>
+    
+    <p>These functions provide tidy eval-compatible ways to capture
+symbols (<code>sym()</code>, <code>syms()</code>, <code>ensym()</code>), expressions (<code>expr()</code>,
+<code>exprs()</code>, <code>enexpr()</code>), and quosures (<code>quo()</code>, <code>quos()</code>, <code>enquo()</code>).
+To learn more about tidy eval and how to use these tools, read
+<a href='http://rlang.tidyverse.org/articles/tidy-evaluation.html'>http://rlang.tidyverse.org/articles/tidy-evaluation.html</a></p>
+    
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong>Emrah Er</strong>. Author, maintainer.
-        </p>
-      </li>
-    </ul>
+        
 
   </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+                </ul>
 
+  </div>
 </div>
-
 
       <footer>
       <div class="copyright">
