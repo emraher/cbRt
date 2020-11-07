@@ -29,6 +29,11 @@ This software is in no way affiliated, endorsed, or approved by the CBRT. It com
 
 `cbRt` is an R interface to The Electronic Data Delivery System (EDDS) of Central Bank of the Republic of Turkey (CBRT). "The system provides a rich range of economic data  and information to support economic education and foster economic research."<sup>[[1]](https://evds2.tcmb.gov.tr/help/videos/hakkindaEN.pdf)</sup>
 
+### Similar Packages
+
+* See [etaymaz/CBRT](https://github.com/etaymaz/CBRT)
+
+
 ## Installation
 
 You can install `cbRt` from github with:
@@ -39,71 +44,51 @@ devtools::install_github("emraher/cbRt")
 ```
 ## Usage and Arguments
 
-There is only one function in the package which retrieves data from EDDS.
+There are two functions in the package.
+
+`cbrt_meta` retrieves all information for all series.
+
+```{r cbrt_meta_usage, eval = FALSE}
+series_meta_info <- cbrt_meta(token = NULL)
+```
+
+For `token` argument see the definition below. This returns a tibble. One can search this tibble to find series IDs.
+
+
+The other function is `cbrt_get` which retrieves data from EDDS.
 
 ```{r usage, eval = FALSE}
-cbRt_get(series, startDate, endDate, token, 
-         aggregationTypes = NULL, formulas = NULL, freq = NULL, nd = TRUE,
-         as = c("tibble", "tibbletime", "data.frame", "data.table"))
+cbrt_get(series, start_date, end_date, token = NULL, nd = TRUE,
+         as = c("tibble", "tsibble", "data.frame", "data.table"))
 ```
 
 Following are the arguments used in the functions. Descriptions are taken from [EDDS Web Service Usage Guide](https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf).
 
-**Note that,** `series`**,** `startDate`**,** `endDate`**,** **and** `token` **are all required arguments.**
+**Note that,** `series`**,** `start_date`**,** `end_date`**,** **and** `token` **are all required arguments.**
 
 ### `series`
 `series` argument can be obtained from CBRT webpage. [Search CBRT webpage](https://evds2.tcmb.gov.tr) in order to find out the series code and use it in the `series` argument. For example, `TP.DK.USD.A` is the code for **(USDTRY) US Dollar (Buying) Exchange Rate**. Argument can take multiple values. 
 
-### `startDate`
-`startDate` argument is the series start date as `dd-mm-yyyy` format. In order to display the frequency of the desired series, the first day of the corresponding frequency must be stated in the start date as `dd-mm-yyyy` format. **This argument takes a single value.**
+### `start_date`
+`start_date` argument is the series start date as `dd-mm-yyyy` format. In order to display the frequency of the desired series, the first day of the corresponding frequency must be stated in the start date as `dd-mm-yyyy` format. **This argument takes a single value.**
 
-### `endDate`
-`endDate` argument is the series end date as `dd-mm-yyyy` format. **This argument takes a single value.**
+### `end_date`
+`end_date` argument is the series end date as `dd-mm-yyyy` format. **This argument takes a single value.**
 
 ### `token`
-`token` argument is the required API key. [Follow the instructions on CBRT webpage](https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf) to obtain the user specific API key. **This argument takes a single value.**
+`token` argument is the required API key. [Follow the instructions on CBRT webpage](https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf) to obtain the user specific API key. **This argument takes a single value.** 
 
-### `aggregationTypes`
-`aggregationTypes` argument is the aggregation applied to series. Available aggregations are;
+You can set your token with 
 
-- **default** : Original
-- **avg**     : Average
-- **min**     : Minimum
-- **max**     : Maximum
-- **first**   : Beginning
-- **last**    : End
-- **sum**     : Cumulative
+```
+Sys.setenv(EVDS_TOKEN = "Iq83AIL5bss")
+```
 
-If this parameter is not entered by the user, the original observation parameter is applied for the relevant series. Argument can take multiple values.
+or you can add it to your `.Renviron` file as
 
-### `formulas`
-`formulas` argument is the formula applied to series. Available formulas are;
-
-- **0**: Level
-- **1**: Percentage Change
-- **2**: Difference
-- **3**: Year-to-year Percent Change
-- **4**: Year-to-year Differences
-- **5**: Percentage Change Compared to End-of-Previous Year
-- **6**: Difference Compared to End-of-Previous Year
-- **7**: Moving Average
-- **8**: Moving Sum
-
-If this parameter is not entered by the user, the level formula parameter is applied for the relevant series. Argument can take multiple values.
-
-### `freq`
-`freq` argument is the frequency of the series. Available frequencies are;
-
-- **1**: Daily
-- **2**: Business
-- **3**: Weekly (Friday)
-- **4**: Twicemonthly
-- **5**: Monthly
-- **6**: Quarterly
-- **7**: Semiannual
-- **8**: Annual
-
-If this parameter is not entered by the user, the common frequency of the series is taken. If you enter a higher frequency (eg: monthly) than the common frequency of the series (eg: annually), the common frequency of the series is taken into account (eg: annually). **This argument takes a single value.** 
+```
+EVDS_TOKEN = "Iq83AIL5bss"
+```
 
 ### `nd`
 `nd` argument is a `TRUE` or `FALSE` argument. Data retrieved sometimes includes ND terms. If `nd` is set to `TRUE` (which is default), all NDs are converted to NAs.
@@ -112,7 +97,7 @@ If this parameter is not entered by the user, the common frequency of the series
 `as` argument is the class of the output. Available classes are;
 
 - **tibble** 
-- **tibbletime**
+- **tsibble**
 - **data.frame**
 - **data.table**
 
@@ -121,97 +106,40 @@ If this parameter is not entered by the user, the common frequency of the series
 ## Examples
 ### Single Series
 
-Following example retrieves **(USDTRY) US Dollar (Buying) Exchange Rate**. Since no optional arguments are supplied, default values for the relevant series are applied. In this case `freq` is `1` (Daily), `aggregationTypes` is `default` (Original), and `formulas` is `0` (Level). Compare the data sets retrieved.
+Following example retrieves **(USDTRY) US Dollar (Buying) Exchange Rate**. 
 
 ```{r example1}
 library(cbRt)
 series    <- "TP.DK.USD.A"
-startDate <- "01-01-2017"
-endDate   <- "01-01-2018"
-token     <- readLines("token")
+start_date <- "01-01-2017"
+end_date   <- "01-01-2018"
+token     <- Sys.getenv("EVDS_TOKEN")
 
-(usd_try <- cbRt_get(series, startDate, endDate, token))
-(usd_try <- cbRt_get(series, startDate, endDate, token, aggregationTypes = "default", formulas = 0, freq = 1))
-```
-
-We can get single series with multiple different formulas. In this example, `formulas` is set to `0` (Level) and `1` (Percentage Change).
-
-```{r example2}
-(usd_try <- cbRt_get(series, startDate, endDate, token, formulas = c(0, 1)))
-```
-
-**TODO:** Throw error in this case.
-
-We cannot get single series with multiple different aggregation types, which makes sense. In this example, `aggregationTypes` is set to `avg` (Average) and `min` (Minimum). Result is daily original observations.
-
-```{r example3}
-(usd_try <- cbRt_get(series, startDate, endDate, token, aggregationTypes = c("avg", "min")))
-```
-
-**TODO:** Gives an extra column. Delete this.
-
-We can get single series with multiple different aggregation types and multiple different formulas. In the first column `aggregationTypes` is `min` (Minimum) and `formulas` is `1` (Percentage Change). In the second column `aggregationTypes` is `max` (Maximum) and `formulas` is `2` (Difference). 
-
-```{r example4}
-(usd_try <- cbRt_get(series, startDate, endDate, token, aggregationTypes = c("min", "max"), formulas = c(1, 2)))
+(usd_try <- cbrt_get(series, start_date, end_date, token))
 ```
 
 ### Multiple Series
 
-Following example retrieves **(USDTRY) US Dollar (Buying) Exchange Rate** and **(EURTRY) Euro (Buying) Exchange Rate**. Since no optional arguments are supplied, default values for the relevant series are applied. In this case `freq` is `1` (Daily), `aggregationTypes` is `default` (Original), and `formualas` is `0` (Level). Compare the data sets retrieved.
+Following example retrieves **(USDTRY) US Dollar (Buying) Exchange Rate** and **(EURTRY) Euro (Buying) Exchange Rate**. 
 
 ```{r example5}
 series <- c("TP.DK.USD.A", "TP.DK.EUR.A")
 
-(usd_eur_try <- cbRt_get(series, startDate, endDate, token))
-(usd_eur_try <- cbRt_get(series, startDate, endDate, token, freq = 1, formulas = 0))
+(usd_eur_try <- cbrt_get(series, start_date, end_date, token))
 ```
-
-**TODO:** Gives an extra column. Delete this.
-
-We can get multiple series with multiple different formulas. In this example, `formulas` is set to `0` (Level) and `1` (Percentage Change).
-
-```{r example6}
-(usd_eur_try <- cbRt_get(series, startDate, endDate, token, formulas = c(0, 1)))
-```
-
-**TODO:** Throw error in this case.
-
-We cannot get multiple series with multiple different aggregation types. In this example, `aggregationTypes` is set to `avg` (Average) and `min` (Minimum). Result is daily original observations.
-
-```{r example7}
-(usd_eur_try <- cbRt_get(series, startDate, endDate, token, aggregationTypes = c("avg", "min")))
-```
-
-**TODO:** Gives an extra column. Delete this.
-
-We can get multiple series with multiple different aggregation types and multiple different formulas. In the first column `aggregationTypes` is `avg` (Average) and `formulas` is `0` (Level). In the second column `aggregationTypes` is `min` (Minimum) and `formulas` is `1` (Percentage Change). 
-
-```{r example8}
-(usd_eur_try <- cbRt_get(series, startDate, endDate, token, 
-                        aggregationTypes = c("avg", "min"), formulas = c(0, 1)))
-```
-
-We can get multiple series with multiple different aggregation types and multiple different formulas. In the first column `aggregationTypes` is `avg` (Average) and `formulas` is `0` (Level). In the second column `aggregationTypes` is `min` (Minimum) and `formulas` is `1` (Percentage Change). We also set `freq` to `5` (Monthly).
-
-```{r example9}
-(usd_eur_try <- cbRt_get(series, startDate, endDate, token, 
-                        aggregationTypes = c("avg", "min"), formulas = c(0, 1), freq = 5))
-```
-
 
 ### Series with Location Data
 
-Following are examples for data with location attributes. Series is Hedonic House Price Index (HHPI)(2010=100)(CBRT)(Monthly). `TP.HKFE02` and `TP.HKFE03` are price indices codes for Ankara and Istanbul, respectively. This series can be used to draw maps. At this time there is no support in the package though.
+Following are examples for data with location attributes. Series is Hedonic House Price Index (HHPI)(2010=100)(CBRT)(Monthly). `TP.HKFE02` and `TP.HKFE03` are price indices codes for Istanbul and Ankara, respectively. This series can be used to draw maps. At this time there is no support in the package though.
 
 ```{r example10}
 # Single Series
 series <- "TP.HKFE02"
-(hhpi <- cbRt_get(series, startDate, endDate, token))
+(hhpi <- cbrt_get(series, start_date, end_date, token))
 ```
 ```{r example11}
 # Multiple Series
 series <- c("TP.HKFE02", "TP.HKFE03")
-(hhpi <- cbRt_get(series, startDate, endDate, token))
+(hhpi <- cbrt_get(series, start_date, end_date, token))
 ```
 

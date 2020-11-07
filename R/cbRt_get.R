@@ -2,77 +2,22 @@
 #'
 #' @param series Series Code
 #'
-#' \code{series} argument can be obtained from CBRT webpage. Search CBRT webpage
-#' in order to find out the series code and use it in the \code{series} argument.
-#' The serial codes are displayed. If more than one series is selected, it takes
-#' up parameters as the number of series, the serial codes are separated by
-#' a "-" sign.
-#'
-#' @param startDate Start date
-#'
-#' \code{startDate} argument is the series start date as dd-mm-yyyy format.
-#' In order to display the frequency of the desired series, the first day of the
-#' corresponding frequency must be stated in the start date as dd-mm-yyyy format.
-#'
-#' @param endDate End date
-#'
-#' \code{endDate} argument is the series end date as dd-mm-yyyy format.
-#'
-#' @param token API key
-#'
-#' \code{token} argument is the required API key.
-#' See <https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf>
-#' for instructions to obtain the API key.
-#'
-#' @param aggregationTypes Aggregation type
-#'
-#' \code{aggregationTypes} argument is the aggregation applied to series.
-#' Available aggregations are;
-#' avg   : Average
-#' min   : Minimum
-#' max   : Maximum
-#' first : Beginning
-#' last  : End
-#' sum   : Cumulative
-#' If more than one series is selected, it takes up parameters as the number of
+#' \code{series} argument can be obtained from CBRT webpage. Search CBRT
+#' webpage in order to find out the series code and use it in the
+#' \code{series} argument. The serial codes are displayed. If more than
+#' one series is selected, it takes up parameters as the number of
 #' series, the serial codes are separated by a "-" sign.
-#' If this parameter is not entered by the user, the original observation
-#' parameter is applied for the relevant series.
 #'
-#' @param formulas Formulas applied to series
+#' @param start_date Start date
 #'
-#' \code{formulas} argument is the formula applied to series.
-#' Available formulas are;
-#' 0: Level
-#' 1: Percentage change
-#' 2: Difference
-#' 3: Year-to-year Percent Change
-#' 4: Year-to-year Differences
-#' 5: Percentage Change Compared to End-of-Previous Year
-#' 6: Difference Compared to End-of-Previous Year
-#' 7: Moving Average
-#' 8: Moving Sum
-#' If more than one series is selected, it takes up parameters as the number of
-#' series, the serial codes are separated by a "-" sign. If this parameter is
-#' not entered by the user, the level formula parameter is applied for the
-#' relevant series.
+#' \code{start_date} argument is the series start date as dd-mm-yyyy
+#' format. In order to display the frequency of the desired series, the
+#' first day of the corresponding frequency must be stated in the start
+#' date as dd-mm-yyyy format.
 #'
-#' @param freq Frequency of series
+#' @param end_date End date
 #'
-#' \code{freq} argument is the frequency of the series.
-#' Available frequencies are;
-#' 1: Daily
-#' 2: Business
-#' 3: Weekly (Friday)
-#' 4: Twicemonthly
-#' 5: Monthly
-#' 6: Quarterly
-#' 7: Semiannual
-#' 8: Annual
-#' This parameter takes a single value. If this parameter is not entered by the
-#' user, the common frequency of the series is taken. If you enter a higher
-#' frequency (eg: monthly) than the common frequency of the series (eg: annually),
-#' the common frequency of the series is taken into account (eg: annually).
+#' \code{end_date} argument is the series end date as dd-mm-yyyy format.
 #'
 #' @param nd Convert ND values to NA
 #'
@@ -82,31 +27,33 @@
 #'
 #' @param as Type of data to return
 #'
-#' @return
-#' Argument \code{as} can be set to either \code{tibble}, \code{tibbletime},
+#' Argument \code{as} can be set to either \code{tibble}, \code{tsibble},
 #' \code{data.frame}, or \code{data.table} to obtain different types of data
 #' classes. \code{tibble} is the default output class.
 #'
+#' @return A data frame (tibble, tsibble, data.frame, or data.table)
 #'
 #' @examples
 #' # Download the given series for the given dates
-#' \dontrun{get_series(series = "TP.DK.USD.A",
-#'                     startDate = "01-01-2017",
-#'                     endDate = "01-01-2018",
-#'                     token = APIkey)}
+#' \dontrun{cbrt_get(series = "TP.DK.USD.A",
+#'                   start_date = "01-01-2017",
+#'                   end_date = "01-01-2018",
+#'                   token = APIkey)}
 #'
 #' @export
-cbRt_get <- function(series,
-                     startDate,
-                     endDate,
-                     token,
-                     aggregationTypes = NULL,
-                     formulas = NULL,
-                     freq = NULL,
+cbrt_get <- function(series,
+                     start_date,
+                     end_date,
                      nd = TRUE,
-                     as = c("tibble", "tibbletime", "data.frame", "data.table")) {
-  url <- cbRt_url(series, startDate, endDate, token, aggregationTypes, formulas, freq)
-  res <- cbRt_geturl(url)
+                     as = c("tibble", "tsibble", "data.frame", "data.table")) {
+
+
+  token <- Sys.getenv("EVDS_TOKEN") # Get token from .Renviron
+
+
+  url <- cbrt_url(series, token, start_date, end_date)
+
+  res <- cbrt_geturl(url)
 
   # Check response
   if (res$status_code != 200) {
@@ -144,8 +91,8 @@ cbRt_get <- function(series,
   # Output data class
   as <- match.arg(as)
 
-  if (as == "tibbletime") {
-    df <- tibbletime::as_tbl_time(df, index = "Date")
+  if (as == "tsibble") {
+    df <- tsibble::as_tsibble(df, key = "Date")
   } else if (as == "data.frame") {
     df
   } else if (as == "data.table") {

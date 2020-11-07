@@ -3,7 +3,6 @@
 \docType{package}
 \name{cbRt}
 \alias{cbRt}
-\alias{cbRt-package}
 \title{R Interface to CBRT EDDS}
 \description{
 The Electronic Data Delivery System (EDDS) is a dynamic and interactive

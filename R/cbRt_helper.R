@@ -2,139 +2,190 @@
 #'
 #' @keywords internal
 
+# -------------------------------------------------------------------------- ###
+# Get Categories----
+# -------------------------------------------------------------------------- ###
+get_categories_info <- function(token = NULL) {
+  if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN")
+  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/categories/key="
+  url <- paste0(urlroot, token, "&type=json")
+  doc <- jsonlite::fromJSON(url)
+  return(doc)
+}
 
-# Create URL -------------------------------------------------------------------
-cbRt_url <- function(series, startDate, endDate, token, aggregationTypes = NULL, formulas = NULL, freq = NULL) {
+# -------------------------------------------------------------------------- ###
+# Get Data Groups----
+# -------------------------------------------------------------------------- ###
+get_groups_info <- function(token = NULL, category_id = NULL) {
+  if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN")
+  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/datagroups/key="
+
+  if (!is.null(category_id)) {
+    url <- paste0(urlroot, token, "&mode=2&code=", category_id, "&type=json")
+    doc <- jsonlite::fromJSON(url)
+    doc <- doc %>% dplyr::select(.data$CATEGORY_ID, .data$DATAGROUP_CODE,
+                                 .data$DATAGROUP_NAME_ENG, .data$FREQUENCY,
+                                 .data$START_DATE, .data$END_DATE,
+                                 tidyselect::everything())
+  } else {
+    url <- paste0(urlroot, token, "&mode=0&type=json")
+    doc <- jsonlite::fromJSON(url)
+    doc <- doc %>% dplyr::select(.data$CATEGORY_ID, .data$DATAGROUP_CODE,
+                                 .data$DATAGROUP_NAME_ENG, .data$FREQUENCY,
+                                 .data$START_DATE, .data$END_DATE,
+                                 tidyselect::everything())
+    doc <- dplyr::filter(doc, .data$DATAGROUP_CODE != "bie_bosluk1")
+    doc <- dplyr::filter(doc, !is.na(.data$START_DATE))
+  }
+
+  return(doc)
+
+}
+
+# -------------------------------------------------------------------------- ###
+# Get Series List----
+# -------------------------------------------------------------------------- ###
+# code is getGroups$DATAGROUP_CODE
+get_series_info <- function(token = NULL, code) {
+  if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN")
+  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/serieList/key="
+  url <- paste0(urlroot, token, "&type=json&code=", code)
+  doc <- jsonlite::fromJSON(url)
+  doc <- doc %>% dplyr::select(.data$DATAGROUP_CODE, .data$SERIE_CODE,
+                               .data$SERIE_NAME_ENG, .data$FREQUENCY_STR,
+                               .data$START_DATE, .data$END_DATE,
+                               tidyselect::everything())
+
+  return(doc)
+}
+
+
+# -------------------------------------------------------------------------- ###
+# Check Frequency----
+# -------------------------------------------------------------------------- ###
+# check_frequency <- function(freq) {
+#   # Check if frequency is given
+#   if (is.null(freq)) {
+#     frequency_url <- ""
+#   } else if (length(freq) == 1L) {
+#     if (freq %in% c(1:8)) {
+#       frequency_url <- paste0("&frequency=", freq)
+#     } else {
+#       stop("frequency must be either 1, 2, 3, 4, 5, 6, 7, or 8!")
+#     }
+#   } else {
+#     stop("frequency takes single value!")
+#   }
+#
+#   return(frequency_url)
+# }
+
+# -------------------------------------------------------------------------- ###
+# Check Aggregation Type----
+# -------------------------------------------------------------------------- ###
+# check_aggregation_type <- function(aggregation_types) {
+#   # Check if aggregation_types is given
+#   if (is.null(aggregation_types)) {
+#     aggregation_types_url <- ""
+#   } else if (length(aggregation_types) == 1L) {
+#     if (all(aggregation_types %in% c("default", "avg", "min", "max",
+#                                      "first", "last", "sum"))) {
+#       aggregation_types_url <- paste0("&aggregationTypes=", aggregation_types)
+#     } else {
+#       stop("aggregation_types must be either default, avg, min, max,
+#              first, last, or sum!")
+#     }
+#   } else {
+#     if (all(aggregation_types %in% c("default", "avg", "min", "max",
+#                                      "first", "last", "sum"))) {
+#       aggregation_types_url <- paste0("&aggregationTypes=",
+#                                       paste(aggregation_types, collapse = "-"))
+#       series_url <- paste0("series=", paste(rep(series,
+#                                                 length(aggregation_types)),
+#                                             collapse = "-"))
+#     } else {
+#       stop("aggregation_types must be either default,
+#              avg, min, max, first, last, or sum!")
+#     }
+#   }
+#
+#   return(aggregation_types_url)
+# }
+
+# -------------------------------------------------------------------------- ###
+# Check Formulas----
+# -------------------------------------------------------------------------- ###
+# check_formulas <- function(formulas) {
+#   # Check if formulas is given
+#   if (is.null(formulas)) {
+#     formulas_url <- ""
+#   } else if (length(formulas) == 1L) {
+#     if (formulas %in% c(0:8)) {
+#       formulas_url <- paste0("&formulas=", formulas)
+#     } else {
+#       stop("formulas must be either 0, 1, 2, 3, 4, 5, 6, 7, or 8!")
+#     }
+#   } else {
+#     if (all(formulas %in% c(0:8))) {
+#       formulas_url <- paste0("&formulas=", paste(formulas, collapse = "-"))
+#       series_url <- paste0("series=", paste(rep(series, length(formulas)),
+#                                             collapse = "-"))
+#     } else {
+#       stop("formulas must be either 0, 1, 2, 3, 4, 5, 6, 7, or 8!")
+#     }
+#   }
+#
+#   return(formulas_url)
+# }
+
+# -------------------------------------------------------------------------- ###
+# Create URL----
+# -------------------------------------------------------------------------- ###
+cbrt_url <- function(series, token = NULL, start_date, end_date) {
   # Check if user provided required fields
-  if (missing(series) || missing(startDate) || missing(endDate) || missing(token)) {
+  if (missing(series) || missing(start_date) || missing(end_date)) {
     stop("You must provide series, start and end dates, and API token!")
   }
 
-  if (is.null(series) || is.null(startDate) || is.null(endDate) || is.null(token)) {
+  if (is.null(series) || is.null(start_date) || is.null(end_date)) {
     stop("You must provide series, start and end dates, and API token!")
   }
+
+  if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN")
 
   # TODO -----------------------------------------------------------------------
   # Check if date format is correct
 
-  # Check if user provided correct type. If not set to json.
-  # if (!(type %in% c("csv", "xml", "json")))
-  #   stop("type must be either csv, json, or xml!")
-
-  # TODO -----------------------------------------------------------------------
-  # Add support for other file types
-  # if ((type %in% c("csv", "xml")))
-  #   stop("At the moment only json is supported!")
-
   # Create URLs
-  startDateURL <- paste0("&startDate=", startDate)
-  endDateURL <- paste0("&endDate=", endDate)
-  tokenURL <- paste0("&key=", token)
-  typeURL <- paste0("&type=json")
-
-  # Check if frequency is given
-  if (is.null(freq)) {
-    frequencyURL <- ""
-  } else if (length(freq) == 1L) {
-    if (freq %in% c(1:8)) {
-      frequencyURL <- paste0("&frequency=", freq)
-    } else {
-      stop("frequency must be either 1, 2, 3, 4, 5, 6, 7, or 8!")
-    }
-  } else {
-    stop("frequency takes single value!")
-  }
+  start_date_url <- paste0("&startDate=", start_date)
+  end_date_url <- paste0("&endDate=", end_date)
+  token_url <- paste0("&key=", token)
+  type_url <- paste0("&type=json")
+  # frequency_url <- check_frequency(freq)
 
   # Check if series length is greater than 1
   if (length(series) == 1L) {
-    seriesURL <- paste0("series=", series)
 
-    # Check if aggregationTypes is given
-    if (is.null(aggregationTypes)) {
-      aggregationTypesURL <- ""
-    } else if (length(aggregationTypes) == 1L) {
-      if (all(aggregationTypes %in% c("default", "avg", "min", "max", "first", "last", "sum"))) {
-        aggregationTypesURL <- paste0("&aggregationTypes=", aggregationTypes)
-      } else {
-        stop("aggregationTypes must be either default, avg, min, max, first, last, or sum!")
-      }
-    } else {
-      # stop("aggregationTypes must be same length as series!")
-      if (all(aggregationTypes %in% c("default", "avg", "min", "max", "first", "last", "sum"))) {
-        aggregationTypesURL <- paste0("&aggregationTypes=", paste(aggregationTypes, collapse = "-"))
-        seriesURL <- paste0("series=", paste(rep(series, length(aggregationTypes)), collapse = "-"))
-      } else {
-        stop("aggregationTypes must be either default, avg, min, max, first, last, or sum!")
-      }
-    }
+    series_url <- paste0("series=", series)
+    # aggregation_types_url <- check_aggregation_type(aggregation_types)
+    # formulas_url <- check_formulas(formulas)
 
-    # Check if formulas is given
-    if (is.null(formulas)) {
-      formulasURL <- ""
-    } else if (length(formulas) == 1L) {
-      if (formulas %in% c(0:8)) {
-        formulasURL <- paste0("&formulas=", formulas)
-      } else {
-        stop("formulas must be either 0, 1, 2, 3, 4, 5, 6, 7, or 8!")
-      }
-    } else {
-      # stop("formulas must be same length as series!")
-      if (all(formulas %in% c(0:8))) {
-        formulasURL <- paste0("&formulas=", paste(formulas, collapse = "-"))
-        seriesURL <- paste0("series=", paste(rep(series, length(formulas)), collapse = "-"))
-      } else {
-        stop("formulas must be either 0, 1, 2, 3, 4, 5, 6, 7, or 8!")
-      }
-    }
-  } else { # Series length is greater than 1
-    nseries <- length(series)
+  } else {# Series length is greater than 1
+    # nseries <- length(series)
     series <- paste(series, collapse = "-")
-    seriesURL <- paste0("series=", series)
-
-    # Check if aggregationTypes is given
-    if (is.null(aggregationTypes)) {
-      aggregationTypesURL <- ""
-    } else if (length(aggregationTypes) == 1L) {
-      if (all(aggregationTypes %in% c("default", "avg", "min", "max", "first", "last", "sum"))) {
-        aggregationTypesURL <- paste0("&aggregationTypes=", paste(rep(aggregationTypes, nseries), collapse = "-"))
-      } else {
-        stop("aggregationTypes must be either default, avg, min, max, first, last, or sum!")
-      }
-    } else if (length(aggregationTypes) == nseries) {
-      if (all(aggregationTypes %in% c("default", "avg", "min", "max", "first", "last", "sum"))) {
-        aggregationTypesURL <- paste0("&aggregationTypes=", paste(aggregationTypes, collapse = "-"))
-      } else {
-        stop("aggregationTypes must be either default, avg, min, max, first, last, or sum!")
-      }
-    } else {
-      stop("aggregationTypes must be same length as series!")
-    }
-
-    # Check if formulas is given
-    if (is.null(formulas)) {
-      formulasURL <- paste0("")
-    } else if (length(formulas) == 1L) {
-      if (all(formulas %in% c(0:8))) {
-        formulasURL <- paste0("&formulas=", paste(rep(formulas, nseries), collapse = "-"))
-      } else {
-        stop("formulas must be either 0, 1, 2, 3, 4, 5, 6, 7, or 8!")
-      }
-    } else if (length(formulas) == nseries) {
-      if (all(formulas %in% c(0:8))) {
-        formulasURL <- paste0("&formulas=", paste(formulas, collapse = "-"))
-      } else {
-        stop("formulas must be either 0, 1, 2, 3, 4, 5, 6, 7, or 8!")
-      }
-    } else {
-      stop("formulas must be same length as series!")
-    }
+    series_url <- paste0("series=", series)
+    # aggregation_types_url <- check_aggregation_type(aggregation_types)
+    # formulas_url <- check_formulas(formulas)
   }
-  url <- paste0("https://evds2.tcmb.gov.tr/service/evds/", seriesURL, startDateURL, endDateURL, typeURL, tokenURL, aggregationTypesURL, formulasURL, frequencyURL)
+
+  url <- paste0("https://evds2.tcmb.gov.tr/service/evds/",
+                series_url, start_date_url, end_date_url, type_url, token_url)
   return(url)
 }
 
-
-# Get URL ----------------------------------------------------------------------
-cbRt_geturl <- function(url, ...) {
+# -------------------------------------------------------------------------- ###
+# Get URL----
+# -------------------------------------------------------------------------- ###
+cbrt_geturl <- function(url, ...) {
   httr::GET(url = url)
 }

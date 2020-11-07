@@ -1,3 +1,8 @@
-Changes in Version 0.0.0.9000
+Changes in Version 0.1.1
+
+  * Simplified the functions. Removed aggregation and frequency.
+  * Added cbrt_meta function to retrieve all available information for series.
+
+Changes in Version 0.1.0
 
   * First release
