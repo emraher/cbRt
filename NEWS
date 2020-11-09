@@ -1,6 +1,7 @@
 Changes in Version 0.1.2
 
-  * Added frequency argument to function call.
+  * Added formulas argument to function call.
+  * Added series metadata data
 
 Changes in Version 0.1.1
 
