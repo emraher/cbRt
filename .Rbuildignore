@@ -18,3 +18,4 @@
 ^mytests$
 ^revdep$
 ^token$
+^\.github$
