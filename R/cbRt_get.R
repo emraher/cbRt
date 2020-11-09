@@ -19,6 +19,32 @@
 #'
 #' \code{end_date} argument is the series end date as dd-mm-yyyy format.
 #'
+#' @param formulas Formulas applied to series
+#'
+#' \code{formulas} argument is the formula applied to series.
+#'
+#' Available formulas are;
+#' 0: Level
+#' 1: Percentage change
+#' 2: Difference
+#' 3: Year-to-year Percent Change
+#' 4: Year-to-year Differences
+#' 5: Percentage Change Compared to End-of-Previous Year
+#' 6: Difference Compared to End-of-Previous Year
+#' 7: Moving Average
+#' 8: Moving Sum
+#'
+#' If more than one series is selected, it takes up parameters as the number of
+#' series, the serial codes are separated by a "-" sign. If this parameter is
+#' not entered by the user, the level formula parameter is applied for the
+#' relevant series.
+#'
+#' @param token API key
+#'
+#' \code{token} argument is the required API key.
+#' See <https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf>
+#' for instructions to obtain the API key.
+#'
 #' @param nd Convert ND values to NA
 #'
 #' \code{nd} argument is a TRUE or FALSE argument. Data retrieved sometimes
@@ -44,43 +70,51 @@
 cbrt_get <- function(series,
                      start_date,
                      end_date,
+                     formulas = NULL,
+                     token = NULL,
                      nd = TRUE,
                      as = c("tibble", "tsibble", "data.frame", "data.table")) {
 
 
   token <- Sys.getenv("EVDS_TOKEN") # Get token from .Renviron
 
+  # EVDS combines series if multiple series are requested.
+  # If one yearly and one monthly requested, API converts monthly to yearly.
+  # I don't want conversion.
+  # I have to get all data and combine series myself.
 
-  url <- cbrt_url(series, token, start_date, end_date)
-
-  res <- cbrt_geturl(url)
-
-  # Check response
-  if (res$status_code != 200) {
-    stop("Bad Request, Error: ", res$status_code)
+  if (is.null(formulas)) {
+    url <- purrr::map(.x = series,
+                      .f = ~ cbrt_url(.x, token, start_date, end_date))
+  } else {
+    url <- purrr::map2(.x = series,
+                       .y = formulas,
+                       .f = ~ cbrt_url(.x, token, start_date, end_date, .y))
   }
 
-  # Read contents
-  res_json <- httr::content(res, as = "raw", encoding = "UTF-8")
-  res_json <- rawToChar(res_json)
 
-  # Extract data
-  res_df <- jsonlite::fromJSON(res_json)
-  df <- res_df[2]$items
 
-  # Fix dates
-  if ("Tarih" %in% colnames(df)) df$Tarih <- NULL
-  if ("UNIXTIME" %in% colnames(df)) {
-    df <- within(df, {
-      UNIXTIME <- anytime::anydate(as.numeric(df$UNIXTIME$`$numberLong`))
-    })
+  res <- purrr::map(.x = url, .f = ~ cbrt_geturl(.x))
+
+  # We need to Check response for all urls.
+
+  scodes <- purrr::map_dbl(.x = res, .f = ~ httr::status_code(.x))
+
+
+  if (any(scodes != 200)) {
+    stop("Bad Request!\n", "Please check if function arguments are correct!\n",
+         "For series ",
+         paste(which(scodes != 200), collapse = ", "),
+         " request returned error codes ",
+         paste(scodes[which(scodes != 200)], collapse = ", "),
+         " respectively.\n\n")
   }
-  names(df)[names(df) == "UNIXTIME"] <- "Date"
 
-  # Reorder columns
-  # https://stackoverflow.com/a/39449541
-  # https://stackoverflow.com/users/6822273/ht-079
-  df <- df[, c(which(colnames(df) == "Date"), which(colnames(df) != "Date"))]
+  df <- purrr::map(.x = res, .f = ~ json_read_res(.x)) %>%
+    purrr::reduce(dplyr::full_join, by = "Date") %>%
+    dplyr::arrange(.data$Date) %>%
+    janitor::remove_empty(which = "cols") # Remove empty (all NA) columns
+
 
   # Convert ND
 
@@ -92,7 +126,7 @@ cbrt_get <- function(series,
   as <- match.arg(as)
 
   if (as == "tsibble") {
-    df <- tsibble::as_tsibble(df, key = "Date")
+    df <- tsibble::as_tsibble(df, index = "Date")
   } else if (as == "data.frame") {
     df
   } else if (as == "data.table") {

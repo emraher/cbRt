@@ -1,7 +1,7 @@
 Package: cbRt
 Type: Package
 Title: R Interface to EDDS of CBRT 
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: person("Emrah", "Er", email = "eer@eremrah.com", role = c("aut", "cre"))
 Description: cbRt provides an interface to the Electronic Data Delivery System (https://evds2.tcmb.gov.tr/) of the Central Bank of the Republic of Turkey.
 License: MIT + file LICENSE
@@ -30,5 +30,6 @@ Imports:
     dplyr,
     tidyselect,
     purrr,
-    tibble
+    tibble,
+    janitor
 VignetteBuilder: knitr

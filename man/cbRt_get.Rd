@@ -8,6 +8,8 @@ cbrt_get(
   series,
   start_date,
   end_date,
+  formulas = NULL,
+  token = NULL,
   nd = TRUE,
   as = c("tibble", "tsibble", "data.frame", "data.table")
 )
@@ -31,6 +33,32 @@ date as dd-mm-yyyy format.}
 \item{end_date}{End date
 
 \code{end_date} argument is the series end date as dd-mm-yyyy format.}
+
+\item{formulas}{Formulas applied to series
+
+\code{formulas} argument is the formula applied to series.
+
+Available formulas are;
+0: Level
+1: Percentage change
+2: Difference
+3: Year-to-year Percent Change
+4: Year-to-year Differences
+5: Percentage Change Compared to End-of-Previous Year
+6: Difference Compared to End-of-Previous Year
+7: Moving Average
+8: Moving Sum
+
+If more than one series is selected, it takes up parameters as the number of
+series, the serial codes are separated by a "-" sign. If this parameter is
+not entered by the user, the level formula parameter is applied for the
+relevant series.}
+
+\item{token}{API key
+
+\code{token} argument is the required API key.
+See \url{https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf}
+for instructions to obtain the API key.}
 
 \item{nd}{Convert ND values to NA
 

@@ -52,13 +52,13 @@ There are two functions in the package.
 series_meta_info <- cbrt_meta(token = NULL)
 ```
 
-For `token` argument see the definition below. This returns a tibble. One can search this tibble to find series IDs.
+For `token` argument see the definition below. This returns a tibble. One can search this tibble to find series IDs and other information on series.
 
 
 The other function is `cbrt_get` which retrieves data from EDDS.
 
 ```{r usage, eval = FALSE}
-cbrt_get(series, start_date, end_date, token = NULL, nd = TRUE,
+cbrt_get(series, start_date, end_date, formulas, token = NULL, nd = TRUE,
          as = c("tibble", "tsibble", "data.frame", "data.table"))
 ```
 
@@ -67,13 +67,32 @@ Following are the arguments used in the functions. Descriptions are taken from [
 **Note that,** `series`**,** `start_date`**,** `end_date`**,** **and** `token` **are all required arguments.**
 
 ### `series`
-`series` argument can be obtained from CBRT webpage. [Search CBRT webpage](https://evds2.tcmb.gov.tr) in order to find out the series code and use it in the `series` argument. For example, `TP.DK.USD.A` is the code for **(USDTRY) US Dollar (Buying) Exchange Rate**. Argument can take multiple values. 
+`series` argument can be obtained from CBRT webpage. [Search CBRT webpage](https://evds2.tcmb.gov.tr) in order to find out the series code and use it in the `series` argument. For example, `TP.DK.USD.A` is the code for **(USDTRY) US Dollar (Buying) Exchange Rate**. 
+
+One can also use `cbrt_meta` function to get all information for all series and search in the resulting tibble. 
+
+Argument can take multiple values. 
 
 ### `start_date`
-`start_date` argument is the series start date as `dd-mm-yyyy` format. In order to display the frequency of the desired series, the first day of the corresponding frequency must be stated in the start date as `dd-mm-yyyy` format. **This argument takes a single value.**
+`start_date` argument is the series start date as `dd-mm-yyyy` format. **This argument takes a single value.**
 
 ### `end_date`
 `end_date` argument is the series end date as `dd-mm-yyyy` format. **This argument takes a single value.**
+
+### `formulas`
+`formulas` argument is the formula applied to series. Available formulas are;
+
+- **0**: Level
+- **1**: Percentage Change
+- **2**: Difference
+- **3**: Year-to-year Percent Change
+- **4**: Year-to-year Differences
+- **5**: Percentage Change Compared to End-of-Previous Year
+- **6**: Difference Compared to End-of-Previous Year
+- **7**: Moving Average
+- **8**: Moving Sum
+
+If this parameter is not supplied by the user, the level formula parameter is applied for the relevant series. If retrieving multiple series, argument should take multiple values.
 
 ### `token`
 `token` argument is the required API key. [Follow the instructions on CBRT webpage](https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf) to obtain the user specific API key. **This argument takes a single value.** 
@@ -115,17 +134,54 @@ start_date <- "01-01-2017"
 end_date   <- "01-01-2018"
 token     <- Sys.getenv("EVDS_TOKEN")
 
-(usd_try <- cbrt_get(series, start_date, end_date, token))
+(usd_try <- cbrt_get(series, start_date, end_date))
 ```
 
 ### Multiple Series
 
-Following example retrieves **(USDTRY) US Dollar (Buying) Exchange Rate** and **(EURTRY) Euro (Buying) Exchange Rate**. 
+Following example retrieves multiple different series with different frequencies. 
+
+EDDS API converts series to a common frequency if they are requested together and no frequency argument is given. 
+
+For example, if you request one yearly and one monthly series, API will return both series as yearly values.
+
+Package, on the other hand, sends independent queries for each series and joins them together without changing the frequency.
+
+I opted not to include `freq` argument to function call.
+
+The example below also shows the usage of the `formulas` argument.
 
 ```{r example5}
-series <- c("TP.DK.USD.A", "TP.DK.EUR.A")
+start_date <- "01-01-2017"
+end_date <- "01-01-2020"
+series <- c("TP.AB.B1", "TP.AB.C2", "TP.BKEA.S001", "TP.KB.O06.TRL")
+formulas <- c(2, 3, 7, 8)
+token <- Sys.getenv("EVDS_TOKEN") # Get token from .Renviron
 
-(usd_eur_try <- cbrt_get(series, start_date, end_date, token))
+# data(cbrt_meta_data)
+# cbrt_meta_data %>% 
+#   dplyr::filter(SERIE_CODE %in% series) %>% 
+#   dplyr::select(SERIE_CODE, FREQUENCY_STR)
+# 
+#      SERIE_CODE  FREQUENCY_STR
+# 1      TP.AB.C2 HAFTALIK(CUMA)
+# 2      TP.AB.B1          AYLIK
+# 3  TP.BKEA.S001       ÜÇ AYLIK
+# 4 TP.KB.O06.TRL         YILLIK
+
+# EDDS API returns following
+url <- paste0("https://evds2.tcmb.gov.tr/service/evds/series=TP.AB.B1-TP.AB.C2-TP.BKEA.S001-TP.KB.O06.TRL&startDate=01-01-2017&endDate=01-01-2020&type=json&key=", token, "&formulas=2-3-7-8")
+
+(edds_dat <- jsonlite::fromJSON(url) %>%
+  .[["items"]] %>%
+  tibble::as_tibble())
+```
+
+
+**NOTE** that API call returns empty columns. `cbrt_get` function also removes them.
+
+```{r example5.1}
+(dat <- cbrt_get(series, start_date, end_date, as = "tsibble"))
 ```
 
 ### Series with Location Data
@@ -135,11 +191,11 @@ Following are examples for data with location attributes. Series is Hedonic Hous
 ```{r example10}
 # Single Series
 series <- "TP.HKFE02"
-(hhpi <- cbrt_get(series, start_date, end_date, token))
+(hhpi <- cbrt_get(series, start_date, end_date))
 ```
 ```{r example11}
 # Multiple Series
 series <- c("TP.HKFE02", "TP.HKFE03")
-(hhpi <- cbrt_get(series, start_date, end_date, token))
+(hhpi <- cbrt_get(series, start_date, end_date))
 ```
 

@@ -60,12 +60,13 @@ series_meta_info <- cbrt_meta(token = NULL)
 ```
 
 For `token` argument see the definition below. This returns a tibble.
-One can search this tibble to find series IDs.
+One can search this tibble to find series IDs and other information on
+series.
 
 The other function is `cbrt_get` which retrieves data from EDDS.
 
 ``` r
-cbrt_get(series, start_date, end_date, token = NULL, nd = TRUE,
+cbrt_get(series, start_date, end_date, formulas, token = NULL, nd = TRUE,
          as = c("tibble", "tsibble", "data.frame", "data.table"))
 ```
 
@@ -81,20 +82,41 @@ Guide](https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf).
 `series` argument can be obtained from CBRT webpage. [Search CBRT
 webpage](https://evds2.tcmb.gov.tr) in order to find out the series code
 and use it in the `series` argument. For example, `TP.DK.USD.A` is the
-code for **(USDTRY) US Dollar (Buying) Exchange Rate**. Argument can
-take multiple values.
+code for **(USDTRY) US Dollar (Buying) Exchange Rate**.
+
+One can also use `cbrt_meta` function to get all information for all
+series and search in the resulting tibble.
+
+Argument can take multiple values.
 
 ### `start_date`
 
 `start_date` argument is the series start date as `dd-mm-yyyy` format.
-In order to display the frequency of the desired series, the first day
-of the corresponding frequency must be stated in the start date as
-`dd-mm-yyyy` format. **This argument takes a single value.**
+**This argument takes a single value.**
 
 ### `end_date`
 
 `end_date` argument is the series end date as `dd-mm-yyyy` format.
 **This argument takes a single value.**
+
+### `formulas`
+
+`formulas` argument is the formula applied to series. Available formulas
+are;
+
+-   **0**: Level
+-   **1**: Percentage Change
+-   **2**: Difference
+-   **3**: Year-to-year Percent Change
+-   **4**: Year-to-year Differences
+-   **5**: Percentage Change Compared to End-of-Previous Year
+-   **6**: Difference Compared to End-of-Previous Year
+-   **7**: Moving Average
+-   **8**: Moving Sum
+
+If this parameter is not supplied by the user, the level formula
+parameter is applied for the relevant series. If retrieving multiple
+series, argument should take multiple values.
 
 ### `token`
 
@@ -143,46 +165,95 @@ start_date <- "01-01-2017"
 end_date   <- "01-01-2018"
 token     <- Sys.getenv("EVDS_TOKEN")
 
-(usd_try <- cbrt_get(series, start_date, end_date, token))
+(usd_try <- cbrt_get(series, start_date, end_date))
 #> # A tibble: 366 x 2
 #>    Date       TP_DK_USD_A
-#>    <date>     <chr>      
-#>  1 2017-01-01 <NA>       
-#>  2 2017-01-02 3.5192     
-#>  3 2017-01-03 3.5338     
-#>  4 2017-01-04 3.5737     
-#>  5 2017-01-05 3.5764     
-#>  6 2017-01-06 3.5934     
-#>  7 2017-01-07 <NA>       
-#>  8 2017-01-08 <NA>       
-#>  9 2017-01-09 3.6134     
-#> 10 2017-01-10 3.702      
+#>    <date>           <dbl>
+#>  1 2017-01-01       NA   
+#>  2 2017-01-02        3.52
+#>  3 2017-01-03        3.53
+#>  4 2017-01-04        3.57
+#>  5 2017-01-05        3.58
+#>  6 2017-01-06        3.59
+#>  7 2017-01-07       NA   
+#>  8 2017-01-08       NA   
+#>  9 2017-01-09        3.61
+#> 10 2017-01-10        3.70
 #> # … with 356 more rows
 ```
 
 ### Multiple Series
 
-Following example retrieves **(USDTRY) US Dollar (Buying) Exchange
-Rate** and **(EURTRY) Euro (Buying) Exchange Rate**.
+Following example retrieves multiple different series with different
+frequencies.
+
+EDDS API converts series to a common frequency if they are requested
+together and no frequency argument is given.
+
+For example, if you request one yearly and one monthly series, API will
+return both series as yearly values.
+
+Package, on the other hand, sends independent queries for each series
+and joins them together without changing the frequency.
+
+I opted not to include `freq` argument to function call.
+
+The example below also shows the usage of the `formulas` argument.
 
 ``` r
-series <- c("TP.DK.USD.A", "TP.DK.EUR.A")
+start_date <- "01-01-2017"
+end_date <- "01-01-2020"
+series <- c("TP.AB.B1", "TP.AB.C2", "TP.BKEA.S001", "TP.KB.O06.TRL")
+formulas <- c(2, 3, 7, 8)
+token <- Sys.getenv("EVDS_TOKEN") # Get token from .Renviron
 
-(usd_eur_try <- cbrt_get(series, start_date, end_date, token))
-#> # A tibble: 366 x 3
-#>    Date       TP_DK_USD_A TP_DK_EUR_A
-#>    <date>     <chr>       <chr>      
-#>  1 2017-01-01 <NA>        <NA>       
-#>  2 2017-01-02 3.5192      3.7099     
-#>  3 2017-01-03 3.5338      3.7086     
-#>  4 2017-01-04 3.5737      3.7278     
-#>  5 2017-01-05 3.5764      3.7291     
-#>  6 2017-01-06 3.5934      3.7808     
-#>  7 2017-01-07 <NA>        <NA>       
-#>  8 2017-01-08 <NA>        <NA>       
-#>  9 2017-01-09 3.6134      3.827      
-#> 10 2017-01-10 3.702       3.8986     
-#> # … with 356 more rows
+# data(cbrt_meta_data)
+# cbrt_meta_data %>% 
+#   dplyr::filter(SERIE_CODE %in% series) %>% 
+#   dplyr::select(SERIE_CODE, FREQUENCY_STR)
+# 
+#      SERIE_CODE  FREQUENCY_STR
+# 1      TP.AB.C2 HAFTALIK(CUMA)
+# 2      TP.AB.B1          AYLIK
+# 3  TP.BKEA.S001       ÜÇ AYLIK
+# 4 TP.KB.O06.TRL         YILLIK
+
+# EDDS API returns following
+url <- paste0("https://evds2.tcmb.gov.tr/service/evds/series=TP.AB.B1-TP.AB.C2-TP.BKEA.S001-TP.KB.O06.TRL&startDate=01-01-2017&endDate=01-01-2020&type=json&key=", token, "&formulas=2-3-7-8")
+
+(edds_dat <- jsonlite::fromJSON(url) %>%
+  .[["items"]] %>%
+  tibble::as_tibble())
+#> # A tibble: 4 x 10
+#>   Tarih `TP_AB_B1-2` `TP_AB_C2-3` `TP_BKEA_S001-7` `TP_KB_O06_TRL-… UNIXTIME$`$numb…
+#>   <chr> <chr>        <chr>        <chr>            <chr>            <chr>           
+#> 1 2017  9485.7       -8.62574687… 0                343279699.6      1483225200      
+#> 2 2018  -3407        -14.4215907… -21.1            399316709.55     1514761200      
+#> 3 2019  6957         12.86468463… 57.1             471538564.43     1546297200      
+#> 4 2020  16352        -47.9825209… 32               52755100         1577833200      
+#> # … with 4 more variables: TP_AB_B1 <lgl>, TP_AB_C2 <lgl>, TP_BKEA_S001 <lgl>,
+#> #   TP_KB_O06_TRL <lgl>
+```
+
+**NOTE** that API call returns empty columns. `cbrt_get` function also
+removes them.
+
+``` r
+(dat <- cbrt_get(series, start_date, end_date, as = "tsibble"))
+#> # A tsibble: 188 x 5 [1D]
+#>    Date       TP_AB_B1 TP_AB_C2 TP_BKEA_S001 TP_KB_O06_TRL
+#>    <date>        <dbl>    <dbl>        <dbl>         <dbl>
+#>  1 2017-01-01    15933       NA            0    343279700.
+#>  2 2017-01-06       NA    96933           NA           NA 
+#>  3 2017-01-13       NA    95292           NA           NA 
+#>  4 2017-01-20       NA    92296           NA           NA 
+#>  5 2017-01-27       NA    92517           NA           NA 
+#>  6 2017-02-01    16648       NA           NA           NA 
+#>  7 2017-02-03       NA    91522           NA           NA 
+#>  8 2017-02-10       NA    92798           NA           NA 
+#>  9 2017-02-17       NA    89049           NA           NA 
+#> 10 2017-02-24       NA    91088           NA           NA 
+#> # … with 178 more rows
 ```
 
 ### Series with Location Data
@@ -196,43 +267,39 @@ is no support in the package though.
 ``` r
 # Single Series
 series <- "TP.HKFE02"
-(hhpi <- cbrt_get(series, start_date, end_date, token))
-#> # A tibble: 13 x 2
+(hhpi <- cbrt_get(series, start_date, end_date))
+#> # A tibble: 37 x 2
 #>    Date       TP_HKFE02
-#>    <date>     <chr>    
-#>  1 2017-01-01 97.5     
-#>  2 2017-02-01 98.6     
-#>  3 2017-03-01 99.4     
-#>  4 2017-04-01 99.8     
-#>  5 2017-05-01 100.4    
-#>  6 2017-06-01 100.5    
-#>  7 2017-07-01 100.4    
-#>  8 2017-08-01 100.2    
-#>  9 2017-09-01 100.5    
-#> 10 2017-10-01 100.8    
-#> 11 2017-11-01 100.7    
-#> 12 2017-12-01 101.1    
-#> 13 2018-01-01 101
+#>    <date>         <dbl>
+#>  1 2017-01-01      97.5
+#>  2 2017-02-01      98.6
+#>  3 2017-03-01      99.4
+#>  4 2017-04-01      99.8
+#>  5 2017-05-01     100. 
+#>  6 2017-06-01     100. 
+#>  7 2017-07-01     100. 
+#>  8 2017-08-01     100. 
+#>  9 2017-09-01     100. 
+#> 10 2017-10-01     101. 
+#> # … with 27 more rows
 ```
 
 ``` r
 # Multiple Series
 series <- c("TP.HKFE02", "TP.HKFE03")
-(hhpi <- cbrt_get(series, start_date, end_date, token))
-#> # A tibble: 13 x 3
+(hhpi <- cbrt_get(series, start_date, end_date))
+#> # A tibble: 37 x 3
 #>    Date       TP_HKFE02 TP_HKFE03
-#>    <date>     <chr>     <chr>    
-#>  1 2017-01-01 97.5      96.4     
-#>  2 2017-02-01 98.6      97.3     
-#>  3 2017-03-01 99.4      98.6     
-#>  4 2017-04-01 99.8      99.2     
-#>  5 2017-05-01 100.4     100.5    
-#>  6 2017-06-01 100.5     100.4    
-#>  7 2017-07-01 100.4     100.2    
-#>  8 2017-08-01 100.2     99.9     
-#>  9 2017-09-01 100.5     100.8    
-#> 10 2017-10-01 100.8     101.7    
-#> 11 2017-11-01 100.7     102.3    
-#> 12 2017-12-01 101.1     102.6    
-#> 13 2018-01-01 101       102.8
+#>    <date>         <dbl>     <dbl>
+#>  1 2017-01-01      97.5      96.4
+#>  2 2017-02-01      98.6      97.3
+#>  3 2017-03-01      99.4      98.6
+#>  4 2017-04-01      99.8      99.2
+#>  5 2017-05-01     100.      100. 
+#>  6 2017-06-01     100.      100. 
+#>  7 2017-07-01     100.      100. 
+#>  8 2017-08-01     100.       99.9
+#>  9 2017-09-01     100.      101. 
+#> 10 2017-10-01     101.      102. 
+#> # … with 27 more rows
 ```
