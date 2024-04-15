@@ -160,7 +160,7 @@ cbrt_url <- function(series,
   series_url <- paste0("series=", paste(series, collapse = "-"))
   start_date_url <- paste0("&startDate=", start_date)
   end_date_url <- paste0("&endDate=", end_date)
-  token_url <- paste0("&key=", token)
+  # token_url <- paste0("&key=", token)
   type_url <- paste0("&type=json")
 
   formulas_url <- check_formulas(series, formulas)
@@ -169,15 +169,15 @@ cbrt_url <- function(series,
   # URL
   url <- paste0("https://evds2.tcmb.gov.tr/service/evds/",
                 series_url, start_date_url, end_date_url,
-                type_url, token_url, formulas_url)
+                type_url, formulas_url)
   return(url)
 }
 
 # -------------------------------------------------------------------------- ###
 # Get URL----
 # -------------------------------------------------------------------------- ###
-cbrt_geturl <- function(url, ...) {
-  httr::GET(url = url)
+cbrt_geturl <- function(url, token, ...) {
+  httr::GET(url = url, httr::add_headers(key = token))
 }
 
 

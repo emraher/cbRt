@@ -3,19 +3,7 @@
 
 # cbRt
 
-[![Project Status: WIP - Initial development is in progress, but there
-has not yet been a stable, usable release suitable for the
-public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Linux Build
-Status](https://travis-ci.org/emraher/cbRt.svg?branch=master)](https://travis-ci.org/emraher/cbRt)
-[![Windows Build
-status](https://ci.appveyor.com/api/projects/status/i4g4anmhv22t959x?svg=true)](https://ci.appveyor.com/project/emraher/cbRt)
-[![](http://www.r-pkg.org/badges/version/cbRt)](http://www.r-pkg.org/pkg/cbRt)
-[![CRAN RStudio mirror
-downloads](http://cranlogs.r-pkg.org/badges/cbRt)](http://www.r-pkg.org/pkg/cbRt)
-[![Coverage
-status](https://codecov.io/gh/emraher/cbRt/branch/master/graph/badge.svg)](https://codecov.io/github/emraher/cbRt?branch=master)
 
 ## Disclaimer
 
@@ -38,7 +26,7 @@ research.”<sup>[\[1\]](https://evds2.tcmb.gov.tr/help/videos/hakkindaEN.pdf)</
 
 ### Similar Packages
 
--   See [etaymaz/CBRT](https://github.com/etaymaz/CBRT)
+- See [etaymaz/CBRT](https://github.com/etaymaz/CBRT)
 
 ## Installation
 
@@ -104,15 +92,15 @@ Argument can take multiple values.
 `formulas` argument is the formula applied to series. Available formulas
 are;
 
--   **0**: Level
--   **1**: Percentage Change
--   **2**: Difference
--   **3**: Year-to-year Percent Change
--   **4**: Year-to-year Differences
--   **5**: Percentage Change Compared to End-of-Previous Year
--   **6**: Difference Compared to End-of-Previous Year
--   **7**: Moving Average
--   **8**: Moving Sum
+- **0**: Level
+- **1**: Percentage Change
+- **2**: Difference
+- **3**: Year-to-year Percent Change
+- **4**: Year-to-year Differences
+- **5**: Percentage Change Compared to End-of-Previous Year
+- **6**: Difference Compared to End-of-Previous Year
+- **7**: Moving Average
+- **8**: Moving Sum
 
 If this parameter is not supplied by the user, the level formula
 parameter is applied for the relevant series. If retrieving multiple
@@ -144,10 +132,10 @@ are converted to NAs.
 
 `as` argument is the class of the output. Available classes are;
 
--   **tibble**
--   **tsibble**
--   **data.frame**
--   **data.table**
+- **tibble**
+- **tsibble**
+- **data.frame**
+- **data.table**
 
 **tibble** is the default output class.
 
@@ -165,8 +153,8 @@ start_date <- "01-01-2017"
 end_date   <- "01-01-2018"
 token     <- Sys.getenv("EVDS_TOKEN")
 
-(usd_try <- cbrt_get(series, start_date, end_date))
-#> # A tibble: 366 x 2
+(usd_try <- cbrt_get(series, start_date, end_date, token = token))
+#> # A tibble: 366 × 2
 #>    Date       TP_DK_USD_A
 #>    <date>           <dbl>
 #>  1 2017-01-01       NA   
@@ -179,7 +167,7 @@ token     <- Sys.getenv("EVDS_TOKEN")
 #>  8 2017-01-08       NA   
 #>  9 2017-01-09        3.61
 #> 10 2017-01-10        3.70
-#> # … with 356 more rows
+#> # ℹ 356 more rows
 ```
 
 ### Multiple Series
@@ -224,15 +212,15 @@ url <- paste0("https://evds2.tcmb.gov.tr/service/evds/series=TP.AB.B1-TP.AB.C2-T
 (edds_dat <- jsonlite::fromJSON(url) %>%
   .[["items"]] %>%
   tibble::as_tibble())
-#> # A tibble: 4 x 10
-#>   Tarih `TP_AB_B1-2` `TP_AB_C2-3` `TP_BKEA_S001-7` `TP_KB_O06_TRL-… UNIXTIME$`$numb…
-#>   <chr> <chr>        <chr>        <chr>            <chr>            <chr>           
-#> 1 2017  9485.7       -8.62574687… 0                343279699.6      1483225200      
-#> 2 2018  -3407        -14.4215907… -21.1            399316709.55     1514761200      
-#> 3 2019  6957         12.86468463… 57.1             471538564.43     1546297200      
-#> 4 2020  16352        -47.9825209… 32               52755100         1577833200      
-#> # … with 4 more variables: TP_AB_B1 <lgl>, TP_AB_C2 <lgl>, TP_BKEA_S001 <lgl>,
-#> #   TP_KB_O06_TRL <lgl>
+#> # A tibble: 4 × 10
+#>   Tarih `TP_AB_B1-2` `TP_AB_C2-3`        `TP_BKEA_S001-7` `TP_KB_O06_TRL-8`
+#>   <chr> <chr>        <chr>               <chr>            <chr>            
+#> 1 2017  9485.7       -8.625746876697447  0                343279699.6      
+#> 2 2018  -3407        -14.421590773986445 -20.3            399316709.55     
+#> 3 2019  6957         12.864684634620726  57.1             471538564.43     
+#> 4 2020  16466        -38.49704579025111  1.2              144592850        
+#> # ℹ 5 more variables: UNIXTIME <df[,1]>, TP_AB_B1 <lgl>, TP_AB_C2 <lgl>,
+#> #   TP_BKEA_S001 <lgl>, TP_KB_O06_TRL <lgl>
 ```
 
 **NOTE** that API call returns empty columns. `cbrt_get` function also
@@ -253,7 +241,7 @@ removes them.
 #>  8 2017-02-10       NA    92798           NA           NA 
 #>  9 2017-02-17       NA    89049           NA           NA 
 #> 10 2017-02-24       NA    91088           NA           NA 
-#> # … with 178 more rows
+#> # ℹ 178 more rows
 ```
 
 ### Series with Location Data
@@ -268,7 +256,7 @@ is no support in the package though.
 # Single Series
 series <- "TP.HKFE02"
 (hhpi <- cbrt_get(series, start_date, end_date))
-#> # A tibble: 37 x 2
+#> # A tibble: 37 × 2
 #>    Date       TP_HKFE02
 #>    <date>         <dbl>
 #>  1 2017-01-01      97.5
@@ -281,14 +269,14 @@ series <- "TP.HKFE02"
 #>  8 2017-08-01     100. 
 #>  9 2017-09-01     100. 
 #> 10 2017-10-01     101. 
-#> # … with 27 more rows
+#> # ℹ 27 more rows
 ```
 
 ``` r
 # Multiple Series
 series <- c("TP.HKFE02", "TP.HKFE03")
 (hhpi <- cbrt_get(series, start_date, end_date))
-#> # A tibble: 37 x 3
+#> # A tibble: 37 × 3
 #>    Date       TP_HKFE02 TP_HKFE03
 #>    <date>         <dbl>     <dbl>
 #>  1 2017-01-01      97.5      96.4
@@ -301,5 +289,5 @@ series <- c("TP.HKFE02", "TP.HKFE03")
 #>  8 2017-08-01     100.       99.9
 #>  9 2017-09-01     100.      101. 
 #> 10 2017-10-01     101.      102. 
-#> # … with 27 more rows
+#> # ℹ 27 more rows
 ```

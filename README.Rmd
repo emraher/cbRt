@@ -13,13 +13,7 @@ knitr::opts_chunk$set(
 ```
 
 # cbRt
-[![Project Status: WIP - Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Linux Build Status](https://travis-ci.org/emraher/cbRt.svg?branch=master)](https://travis-ci.org/emraher/cbRt)
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/i4g4anmhv22t959x?svg=true)](https://ci.appveyor.com/project/emraher/cbRt)
-[![](http://www.r-pkg.org/badges/version/cbRt)](http://www.r-pkg.org/pkg/cbRt)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cbRt)](http://www.r-pkg.org/pkg/cbRt)
-[![Coverage status](https://codecov.io/gh/emraher/cbRt/branch/master/graph/badge.svg)](https://codecov.io/github/emraher/cbRt?branch=master)
 
 ## Disclaimer
 
@@ -134,7 +128,7 @@ start_date <- "01-01-2017"
 end_date   <- "01-01-2018"
 token     <- Sys.getenv("EVDS_TOKEN")
 
-(usd_try <- cbrt_get(series, start_date, end_date))
+(usd_try <- cbrt_get(series, start_date, end_date, token = token))
 ```
 
 ### Multiple Series

@@ -94,7 +94,7 @@ cbrt_get <- function(series,
 
 
 
-  res <- purrr::map(.x = url, .f = ~ cbrt_geturl(.x))
+  res <- purrr::map(.x = url, .f = ~ cbrt_geturl(.x, token))
 
   # We need to Check response for all urls.
 
