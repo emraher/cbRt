@@ -7,9 +7,10 @@
 # -------------------------------------------------------------------------- ###
 get_categories_info <- function(token = NULL) {
   if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN")
-  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/categories/key="
-  url <- paste0(urlroot, token, "&type=json")
-  doc <- jsonlite::fromJSON(url)
+  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/categories/"
+  url <- paste0(urlroot, "type=json")
+  doc <- cbrt_geturl(url, token = token)
+  doc <- jsonlite::fromJSON(httr::content(doc, as = "text", encoding = "UTF-8"))
   return(doc)
 }
 
@@ -19,24 +20,26 @@ get_categories_info <- function(token = NULL) {
 # -------------------------------------------------------------------------- ###
 get_groups_info <- function(token = NULL, category_id = NULL) {
   if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN")
-  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/datagroups/key="
+  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/datagroups/"
 
   if (!is.null(category_id)) {
-    url <- paste0(urlroot, token, "&mode=2&code=", category_id, "&type=json")
-    doc <- jsonlite::fromJSON(url)
-    doc <- doc %>% dplyr::select(.data$CATEGORY_ID, .data$DATAGROUP_CODE,
-                                 .data$DATAGROUP_NAME_ENG, .data$FREQUENCY,
-                                 .data$START_DATE, .data$END_DATE,
+    url <- paste0(urlroot, "mode=2&code=", category_id, "&type=json")
+    doc <- cbrt_geturl(url, token = token)
+    doc <- jsonlite::fromJSON(httr::content(doc, as = "text", encoding = "UTF-8"))
+    doc <- doc %>% dplyr::select(CATEGORY_ID, DATAGROUP_CODE,
+                                 DATAGROUP_NAME_ENG, FREQUENCY,
+                                 START_DATE, END_DATE,
                                  tidyselect::everything())
   } else {
-    url <- paste0(urlroot, token, "&mode=0&type=json")
-    doc <- jsonlite::fromJSON(url)
-    doc <- doc %>% dplyr::select(.data$CATEGORY_ID, .data$DATAGROUP_CODE,
-                                 .data$DATAGROUP_NAME_ENG, .data$FREQUENCY,
-                                 .data$START_DATE, .data$END_DATE,
+    url <- paste0(urlroot, "mode=0&type=json")
+    doc <- cbrt_geturl(url, token = token)
+    doc <- jsonlite::fromJSON(httr::content(doc, as = "text", encoding = "UTF-8"))
+    doc <- doc %>% dplyr::select(CATEGORY_ID, DATAGROUP_CODE,
+                                 DATAGROUP_NAME_ENG, FREQUENCY,
+                                 START_DATE, END_DATE,
                                  tidyselect::everything())
-    doc <- dplyr::filter(doc, .data$DATAGROUP_CODE != "bie_bosluk1")
-    doc <- dplyr::filter(doc, !is.na(.data$START_DATE))
+    doc <- dplyr::filter(doc, DATAGROUP_CODE != "bie_bosluk1")
+    doc <- dplyr::filter(doc, !is.na(START_DATE))
   }
 
   return(doc)
@@ -49,12 +52,13 @@ get_groups_info <- function(token = NULL, category_id = NULL) {
 # code is getGroups$DATAGROUP_CODE
 get_series_info <- function(token = NULL, code) {
   if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN")
-  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/serieList/key="
-  url <- paste0(urlroot, token, "&type=json&code=", code)
-  doc <- jsonlite::fromJSON(url)
-  doc <- doc %>% dplyr::select(.data$DATAGROUP_CODE, .data$SERIE_CODE,
-                               .data$SERIE_NAME_ENG, .data$FREQUENCY_STR,
-                               .data$START_DATE, .data$END_DATE,
+  urlroot <- "https://evds2.tcmb.gov.tr/service/evds/serieList/"
+  url <- paste0(urlroot, "type=json&code=", code)
+  doc <- cbrt_geturl(url, token = token)
+  doc <- jsonlite::fromJSON(httr::content(doc, as = "text", encoding = "UTF-8"))
+  doc <- doc %>% dplyr::select(DATAGROUP_CODE, SERIE_CODE,
+                               SERIE_NAME_ENG, FREQUENCY_STR,
+                               START_DATE, END_DATE,
                                tidyselect::everything())
 
   return(doc)
@@ -206,7 +210,7 @@ json_read_res <- function(res) {
   names(df)[names(df) == "UNIXTIME"] <- "Date"
 
   # Reorder columns
-  df <- df %>% dplyr::select(.data$Date, tidyselect::everything())
+  df <- df %>% dplyr::select(Date, tidyselect::everything())
 
   return(df)
 }

@@ -76,7 +76,7 @@ cbrt_get <- function(series,
                      as = c("tibble", "tsibble", "data.frame", "data.table")) {
 
 
-  token <- Sys.getenv("EVDS_TOKEN") # Get token from .Renviron
+  if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN") # Get token from .Renviron
 
   # EVDS combines series if multiple series are requested.
   # If one yearly and one monthly requested, API converts monthly to yearly.

@@ -164,11 +164,13 @@ token <- Sys.getenv("EVDS_TOKEN") # Get token from .Renviron
 # 4 TP.KB.O06.TRL         YILLIK
 
 # EDDS API returns following
-url <- paste0("https://evds2.tcmb.gov.tr/service/evds/series=TP.AB.B1-TP.AB.C2-TP.BKEA.S001-TP.KB.O06.TRL&startDate=01-01-2017&endDate=01-01-2020&type=json&key=", token, "&formulas=2-3-7-8")
+url <- paste0("https://evds2.tcmb.gov.tr/service/evds/series=TP.AB.B1-TP.AB.C2-TP.BKEA.S001-TP.KB.O06.TRL&startDate=01-01-2017&endDate=01-01-2020&type=json", "&formulas=2-3-7-8")
 
-(edds_dat <- jsonlite::fromJSON(url) %>%
-  .[["items"]] %>%
-  tibble::as_tibble())
+(edds_dat <- cbRt:::cbrt_geturl(url, token = token) %>%
+    httr::content(as = "text", encoding = "UTF-8") %>% 
+    jsonlite::fromJSON() %>%
+    .[["items"]] %>%
+    tibble::as_tibble())
 ```
 
 
