@@ -15,6 +15,10 @@ knitr::opts_chunk$set(
 # cbRt
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 ## Disclaimer
 
 This software is in no way affiliated, endorsed, or approved by the CBRT. It comes with absolutely no warranty. Also see the [Disclaimer on CBRT webpage](http://www.tcmb.gov.tr/wps/wcm/connect/TCMB+EN/TCMB+EN/Footer+Menu/Disclaimer) since it mentions; **"Information published in this site may be quoted by specific reference thereto, but the use of such information for commercial purposes shall be subject to prior written permission of the CBRT."**
