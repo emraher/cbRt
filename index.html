@@ -5,24 +5,27 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>R Interface to EDDS of CBRT • cbRt</title>
+<title>cbRt • cbRt</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="R Interface to EDDS of CBRT">
-<meta name="description" content="cbRt provides an interface to the Electronic Data Delivery System (https://evds2.tcmb.gov.tr/) of the Central Bank of the Republic of Turkey.">
-<meta property="og:description" content="cbRt provides an interface to the Electronic Data Delivery System (https://evds2.tcmb.gov.tr/) of the Central Bank of the Republic of Turkey.">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Open_Sans-0.4.10/font.css" rel="stylesheet">
+<link href="deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Source_Serif_4-0.4.10/font.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="cbRt">
+<meta name="description" content="R Interface to EVDS of Central Bank of the Republic of Turkey">
+<meta property="og:description" content="R Interface to EVDS of Central Bank of the Republic of Turkey">
 </head>
 <body>
-    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-none" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">cbRt</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,273 +35,272 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/getting-started.html">Getting Started</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="news/index.html" title="Changelog" aria-label="News"><span class="fa far fa-newspaper fa-lg"></span> News</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
-</form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/emraher/cbRt/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/emraher/eerdown/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
 
   </div>
-</nav><div class="container template-home">
+</nav><div class="container template-home" id="container">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="cbrt">cbRt<a class="anchor" aria-label="anchor" href="#cbrt"></a>
 </h1></div>
-<p><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="lifecycle"></a> <a href="https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <!-- badges: end --></p>
-<div class="section level2">
-<h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
-</h2>
-<p>This software is in no way affiliated, endorsed, or approved by the CBRT. It comes with absolutely no warranty. Also see the <a href="http://www.tcmb.gov.tr/wps/wcm/connect/TCMB+EN/TCMB+EN/Footer+Menu/Disclaimer" class="external-link">Disclaimer on CBRT webpage</a> since it mentions; <strong>“Information published in this site may be quoted by specific reference thereto, but the use of such information for commercial purposes shall be subject to prior written permission of the CBRT.”</strong></p>
-</div>
+<!-- badges: start -->
+
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p><code>cbRt</code> is an R interface to The Electronic Data Delivery System (EDDS) of Central Bank of the Republic of Turkey (CBRT). “The system provides a rich range of economic data and information to support economic education and foster economic research.”<sup><a href="https://evds2.tcmb.gov.tr/help/videos/hakkindaEN.pdf" class="external-link">[1]</a></sup></p>
-<div class="section level3">
-<h3 id="similar-packages">Similar Packages<a class="anchor" aria-label="anchor" href="#similar-packages"></a>
-</h3>
+<p><code>cbRt</code> provides an R interface to the Electronic Data Delivery System (EVDS) of the Central Bank of the Republic of Turkey (CBRT). The package enables easy access to economic data including exchange rates, interest rates, and inflation indicators.</p>
+<p><strong>Features:</strong></p>
 <ul>
-<li>See <a href="https://github.com/etaymaz/CBRT" class="external-link">etaymaz/CBRT</a>
-</li>
+<li>Full EVDS API v3 support with automatic handling of the 150 observation limit</li>
+<li>Intelligent chunking - automatically splits large date ranges into multiple requests</li>
+<li>Hybrid frequency detection - detects series frequency from metadata with fallback</li>
+<li>Multiple output formats - tibble, tsibble, data.frame, or data.table</li>
+<li>Formula transformations - apply calculations at the API level</li>
+<li>Clean data handling - automatic conversion of ND values to NA</li>
 </ul>
-</div>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install <code>cbRt</code> from github with:</p>
+<p>Install the development version from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"emraher/cbRt"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="usage-and-arguments">Usage and Arguments<a class="anchor" aria-label="anchor" href="#usage-and-arguments"></a>
+<h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>There are two functions in the package.</p>
-<p><code>cbrt_meta</code> retrieves all information for all series.</p>
+<div class="section level3">
+<h3 id="api-token-setup">API Token Setup<a class="anchor" aria-label="anchor" href="#api-token-setup"></a>
+</h3>
+<p>You need an API token from the CBRT EVDS system:</p>
+<ol style="list-style-type: decimal">
+<li>Visit <a href="https://evds3.tcmb.gov.tr/" class="external-link uri">https://evds3.tcmb.gov.tr/</a>
+</li>
+<li>Create an account and generate your API key</li>
+</ol>
+<p>Store your token securely in your <code>.Renviron</code> file:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">series_meta_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_meta.html">cbrt_meta</a></span><span class="op">(</span>token <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
-<p>For <code>token</code> argument see the definition below. This returns a tibble. One can search this tibble to find series IDs and other information on series.</p>
-<p>The other function is <code>cbrt_get</code> which retrieves data from EDDS.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/cbRt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span>, <span class="va">formulas</span>, token <span class="op">=</span> <span class="cn">NULL</span>, nd <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>         as <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tibble"</span>, <span class="st">"tsibble"</span>, <span class="st">"data.frame"</span>, <span class="st">"data.table"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Following are the arguments used in the functions. Descriptions are taken from <a href="https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf" class="external-link">EDDS Web Service Usage Guide</a>.</p>
-<p><strong>Note that,</strong> <code>series</code><strong>,</strong> <code>start_date</code><strong>,</strong> <code>end_date</code><strong>,</strong> <strong>and</strong> <code>token</code> <strong>are all required arguments.</strong></p>
-<div class="section level3">
-<h3 id="series">
-<code>series</code><a class="anchor" aria-label="anchor" href="#series"></a>
-</h3>
-<p><code>series</code> argument can be obtained from CBRT webpage. <a href="https://evds2.tcmb.gov.tr" class="external-link">Search CBRT webpage</a> in order to find out the series code and use it in the <code>series</code> argument. For example, <code>TP.DK.USD.A</code> is the code for <strong>(USDTRY) US Dollar (Buying) Exchange Rate</strong>.</p>
-<p>One can also use <code>cbrt_meta</code> function to get all information for all series and search in the resulting tibble.</p>
-<p>Argument can take multiple values.</p>
-</div>
-<div class="section level3">
-<h3 id="start_date">
-<code>start_date</code><a class="anchor" aria-label="anchor" href="#start_date"></a>
-</h3>
-<p><code>start_date</code> argument is the series start date as <code>dd-mm-yyyy</code> format. <strong>This argument takes a single value.</strong></p>
-</div>
-<div class="section level3">
-<h3 id="end_date">
-<code>end_date</code><a class="anchor" aria-label="anchor" href="#end_date"></a>
-</h3>
-<p><code>end_date</code> argument is the series end date as <code>dd-mm-yyyy</code> format. <strong>This argument takes a single value.</strong></p>
-</div>
-<div class="section level3">
-<h3 id="formulas">
-<code>formulas</code><a class="anchor" aria-label="anchor" href="#formulas"></a>
-</h3>
-<p><code>formulas</code> argument is the formula applied to series. Available formulas are;</p>
-<ul>
-<li>
-<strong>0</strong>: Level</li>
-<li>
-<strong>1</strong>: Percentage Change</li>
-<li>
-<strong>2</strong>: Difference</li>
-<li>
-<strong>3</strong>: Year-to-year Percent Change</li>
-<li>
-<strong>4</strong>: Year-to-year Differences</li>
-<li>
-<strong>5</strong>: Percentage Change Compared to End-of-Previous Year</li>
-<li>
-<strong>6</strong>: Difference Compared to End-of-Previous Year</li>
-<li>
-<strong>7</strong>: Moving Average</li>
-<li>
-<strong>8</strong>: Moving Sum</li>
-</ul>
-<p>If this parameter is not supplied by the user, the level formula parameter is applied for the relevant series. If retrieving multiple series, argument should take multiple values.</p>
-</div>
-<div class="section level3">
-<h3 id="token">
-<code>token</code><a class="anchor" aria-label="anchor" href="#token"></a>
-</h3>
-<p><code>token</code> argument is the required API key. <a href="https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf" class="external-link">Follow the instructions on CBRT webpage</a> to obtain the user specific API key. <strong>This argument takes a single value.</strong></p>
-<p>You can set your token with</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">EVDS_TOKEN =</span> <span class="st">"Iq83AIL5bss"</span>)</span></code></pre></div>
-<p>or you can add it to your <code>.Renviron</code> file as</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>EVDS_TOKEN <span class="ot">=</span> <span class="st">"Iq83AIL5bss"</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="nd">
-<code>nd</code><a class="anchor" aria-label="anchor" href="#nd"></a>
-</h3>
-<p><code>nd</code> argument is a <code>TRUE</code> or <code>FALSE</code> argument. Data retrieved sometimes includes ND terms. If <code>nd</code> is set to <code>TRUE</code> (which is default), all NDs are converted to NAs.</p>
-</div>
-<div class="section level3">
-<h3 id="as">
-<code>as</code><a class="anchor" aria-label="anchor" href="#as"></a>
-</h3>
-<p><code>as</code> argument is the class of the output. Available classes are;</p>
-<ul>
-<li><strong>tibble</strong></li>
-<li><strong>tsibble</strong></li>
-<li><strong>data.frame</strong></li>
-<li><strong>data.table</strong></li>
-</ul>
-<p><strong>tibble</strong> is the default output class.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
-</h2>
-<div class="section level3">
-<h3 id="single-series">Single Series<a class="anchor" aria-label="anchor" href="#single-series"></a>
-</h3>
-<p>Following example retrieves <strong>(USDTRY) US Dollar (Buying) Exchange Rate</strong>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emraher/cbRt" class="external-link">cbRt</a></span><span class="op">)</span></span>
-<span><span class="va">series</span>    <span class="op">&lt;-</span> <span class="st">"TP.DK.USD.A"</span></span>
-<span><span class="va">start_date</span> <span class="op">&lt;-</span> <span class="st">"01-01-2017"</span></span>
-<span><span class="va">end_date</span>   <span class="op">&lt;-</span> <span class="st">"01-01-2018"</span></span>
-<span><span class="va">token</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"EVDS_TOKEN"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Edit your .Renviron file</span></span>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="op">(</span><span class="va">usd_try</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbRt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span>, token <span class="op">=</span> <span class="va">token</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 366 × 2</span></span>
-<span><span class="co">#&gt;    Date       TP_DK_USD_A</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;           &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2017-01-01       NA   </span></span>
-<span><span class="co">#&gt;  2 2017-01-02        3.52</span></span>
-<span><span class="co">#&gt;  3 2017-01-03        3.53</span></span>
-<span><span class="co">#&gt;  4 2017-01-04        3.57</span></span>
-<span><span class="co">#&gt;  5 2017-01-05        3.58</span></span>
-<span><span class="co">#&gt;  6 2017-01-06        3.59</span></span>
-<span><span class="co">#&gt;  7 2017-01-07       NA   </span></span>
-<span><span class="co">#&gt;  8 2017-01-08       NA   </span></span>
-<span><span class="co">#&gt;  9 2017-01-09        3.61</span></span>
-<span><span class="co">#&gt; 10 2017-01-10        3.70</span></span>
-<span><span class="co">#&gt; # ℹ 356 more rows</span></span></code></pre></div>
+<span><span class="co"># Add this line:</span></span>
+<span><span class="va">EVDS_TOKEN</span> <span class="op">=</span> <span class="st">"your_api_key_here"</span></span></code></pre></div>
+<p>Alternatively, set it for the current session:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>EVDS_TOKEN <span class="op">=</span> <span class="st">"your_api_key_here"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emraher/cbRt" class="external-link">cbRt</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get USD/TRY exchange rate</span></span>
+<span><span class="va">usd_try</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_get.html">cbrt_get</a></span><span class="op">(</span></span>
+<span>  series <span class="op">=</span> <span class="st">"TP.DK.USD.A"</span>,</span>
+<span>  start_date <span class="op">=</span> <span class="st">"01-01-2020"</span>,</span>
+<span>  end_date <span class="op">=</span> <span class="st">"01-01-2024"</span>,</span>
+<span>  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"EVDS_TOKEN"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Series TP.DK.USD.A: Fetching data in 10 chunks to handle 150 observation limit.</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">usd_try</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 2</span></span>
+<span><span class="co">#&gt;   Date       TP_DK_USD_A</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;           &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2020-01-01       NA   </span></span>
+<span><span class="co">#&gt; 2 2020-01-02        5.94</span></span>
+<span><span class="co">#&gt; 3 2020-01-03        5.95</span></span>
+<span><span class="co">#&gt; 4 2020-01-04       NA   </span></span>
+<span><span class="co">#&gt; 5 2020-01-05       NA   </span></span>
+<span><span class="co">#&gt; 6 2020-01-06        5.96</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="multiple-series">Multiple Series<a class="anchor" aria-label="anchor" href="#multiple-series"></a>
 </h3>
-<p>Following example retrieves multiple different series with different frequencies.</p>
-<p>EDDS API converts series to a common frequency if they are requested together and no frequency argument is given.</p>
-<p>For example, if you request one yearly and one monthly series, API will return both series as yearly values.</p>
-<p>Package, on the other hand, sends independent queries for each series and joins them together without changing the frequency.</p>
-<p>I opted not to include <code>freq</code> argument to function call.</p>
-<p>The example below also shows the usage of the <code>formulas</code> argument.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">start_date</span> <span class="op">&lt;-</span> <span class="st">"01-01-2017"</span></span>
-<span><span class="va">end_date</span> <span class="op">&lt;-</span> <span class="st">"01-01-2020"</span></span>
-<span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TP.AB.B1"</span>, <span class="st">"TP.AB.C2"</span>, <span class="st">"TP.BKEA.S001"</span>, <span class="st">"TP.KB.O06.TRL"</span><span class="op">)</span></span>
-<span><span class="va">formulas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">8</span><span class="op">)</span></span>
-<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"EVDS_TOKEN"</span><span class="op">)</span> <span class="co"># Get token from .Renviron</span></span>
+<p>Retrieve multiple series at once - the package handles different frequencies automatically:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get multiple exchange rates</span></span>
+<span><span class="va">exchange_rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_get.html">cbrt_get</a></span><span class="op">(</span></span>
+<span>  series <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TP.DK.USD.A"</span>, <span class="st">"TP.DK.EUR.A"</span>, <span class="st">"TP.DK.GBP.A"</span><span class="op">)</span>,</span>
+<span>  start_date <span class="op">=</span> <span class="st">"01-01-2023"</span>,</span>
+<span>  end_date <span class="op">=</span> <span class="st">"01-01-2024"</span>,</span>
+<span>  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"EVDS_TOKEN"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Series TP.DK.USD.A: Fetching data in 3 chunks to handle 150 observation limit.</span></span>
+<span><span class="co">#&gt; Series TP.DK.EUR.A: Fetching data in 3 chunks to handle 150 observation limit.</span></span>
+<span><span class="co">#&gt; Series TP.DK.GBP.A: Fetching data in 3 chunks to handle 150 observation limit.</span></span>
 <span></span>
-<span><span class="co"># data(cbrt_meta_data)</span></span>
-<span><span class="co"># cbrt_meta_data %&gt;% </span></span>
-<span><span class="co">#   dplyr::filter(SERIE_CODE %in% series) %&gt;% </span></span>
-<span><span class="co">#   dplyr::select(SERIE_CODE, FREQUENCY_STR)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co">#      SERIE_CODE  FREQUENCY_STR</span></span>
-<span><span class="co"># 1      TP.AB.C2 HAFTALIK(CUMA)</span></span>
-<span><span class="co"># 2      TP.AB.B1          AYLIK</span></span>
-<span><span class="co"># 3  TP.BKEA.S001       ÜÇ AYLIK</span></span>
-<span><span class="co"># 4 TP.KB.O06.TRL         YILLIK</span></span>
-<span></span>
-<span><span class="co"># EDDS API returns following</span></span>
-<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"https://evds2.tcmb.gov.tr/service/evds/series=TP.AB.B1-TP.AB.C2-TP.BKEA.S001-TP.KB.O06.TRL&amp;startDate=01-01-2017&amp;endDate=01-01-2020&amp;type=json"</span>, <span class="st">"&amp;formulas=2-3-7-8"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="op">(</span><span class="va">edds_dat</span> <span class="op">&lt;-</span> <span class="fu">cbRt</span><span class="fu">:::</span><span class="fu">cbrt_geturl</span><span class="op">(</span><span class="va">url</span>, token <span class="op">=</span> <span class="va">token</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span>as <span class="op">=</span> <span class="st">"text"</span>, encoding <span class="op">=</span> <span class="st">"UTF-8"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
-<span>    <span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">fromJSON</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="va">.</span><span class="op">[[</span><span class="st">"items"</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 4 × 10</span></span>
-<span><span class="co">#&gt;   Tarih `TP_AB_B1-2` `TP_AB_C2-3`        `TP_BKEA_S001-7` `TP_KB_O06_TRL-8`</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;               &lt;chr&gt;            &lt;chr&gt;            </span></span>
-<span><span class="co">#&gt; 1 2017  9485.7       -8.625746876697447  0                343279699.6      </span></span>
-<span><span class="co">#&gt; 2 2018  -3407        -14.421590773986445 -20.3            399316709.55     </span></span>
-<span><span class="co">#&gt; 3 2019  6957         12.864684634620726  57.1             471538564.43     </span></span>
-<span><span class="co">#&gt; 4 2020  16466        -38.49704579025111  1.2              144592850        </span></span>
-<span><span class="co">#&gt; # ℹ 5 more variables: UNIXTIME &lt;df[,1]&gt;, TP_AB_B1 &lt;lgl&gt;, TP_AB_C2 &lt;lgl&gt;,</span></span>
-<span><span class="co">#&gt; #   TP_BKEA_S001 &lt;lgl&gt;, TP_KB_O06_TRL &lt;lgl&gt;</span></span></code></pre></div>
-<p><strong>NOTE</strong> that API call returns empty columns. <code>cbrt_get</code> function also removes them.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbRt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span>, as <span class="op">=</span> <span class="st">"tsibble"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tsibble: 188 x 5 [1D]</span></span>
-<span><span class="co">#&gt;    Date       TP_AB_B1 TP_AB_C2 TP_BKEA_S001 TP_KB_O06_TRL</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;        &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2017-01-01    15933       NA            0    343279700.</span></span>
-<span><span class="co">#&gt;  2 2017-01-06       NA    96933           NA           NA </span></span>
-<span><span class="co">#&gt;  3 2017-01-13       NA    95292           NA           NA </span></span>
-<span><span class="co">#&gt;  4 2017-01-20       NA    92296           NA           NA </span></span>
-<span><span class="co">#&gt;  5 2017-01-27       NA    92517           NA           NA </span></span>
-<span><span class="co">#&gt;  6 2017-02-01    16648       NA           NA           NA </span></span>
-<span><span class="co">#&gt;  7 2017-02-03       NA    91522           NA           NA </span></span>
-<span><span class="co">#&gt;  8 2017-02-10       NA    92798           NA           NA </span></span>
-<span><span class="co">#&gt;  9 2017-02-17       NA    89049           NA           NA </span></span>
-<span><span class="co">#&gt; 10 2017-02-24       NA    91088           NA           NA </span></span>
-<span><span class="co">#&gt; # ℹ 178 more rows</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">exchange_rates</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 4</span></span>
+<span><span class="co">#&gt;   Date       TP_DK_EUR_A TP_DK_GBP_A TP_DK_USD_A</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;           &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2023-01-01        NA          NA          NA  </span></span>
+<span><span class="co">#&gt; 2 2023-01-02        19.9        22.5        18.7</span></span>
+<span><span class="co">#&gt; 3 2023-01-03        20.0        22.5        18.7</span></span>
+<span><span class="co">#&gt; 4 2023-01-04        19.8        22.3        18.7</span></span>
+<span><span class="co">#&gt; 5 2023-01-05        19.8        22.5        18.7</span></span>
+<span><span class="co">#&gt; 6 2023-01-06        19.9        22.5        18.7</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="series-with-location-data">Series with Location Data<a class="anchor" aria-label="anchor" href="#series-with-location-data"></a>
+<h3 id="applying-formulas">Applying Formulas<a class="anchor" aria-label="anchor" href="#applying-formulas"></a>
 </h3>
-<p>Following are examples for data with location attributes. Series is Hedonic House Price Index (HHPI)(2010=100)(CBRT)(Monthly). <code>TP.HKFE02</code> and <code>TP.HKFE03</code> are price indices codes for Istanbul and Ankara, respectively. This series can be used to draw maps. At this time there is no support in the package though.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Single Series</span></span>
-<span><span class="va">series</span> <span class="op">&lt;-</span> <span class="st">"TP.HKFE02"</span></span>
-<span><span class="op">(</span><span class="va">hhpi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbRt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 37 × 2</span></span>
-<span><span class="co">#&gt;    Date       TP_HKFE02</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2017-01-01      97.5</span></span>
-<span><span class="co">#&gt;  2 2017-02-01      98.6</span></span>
-<span><span class="co">#&gt;  3 2017-03-01      99.4</span></span>
-<span><span class="co">#&gt;  4 2017-04-01      99.8</span></span>
-<span><span class="co">#&gt;  5 2017-05-01     100. </span></span>
-<span><span class="co">#&gt;  6 2017-06-01     100. </span></span>
-<span><span class="co">#&gt;  7 2017-07-01     100. </span></span>
-<span><span class="co">#&gt;  8 2017-08-01     100. </span></span>
-<span><span class="co">#&gt;  9 2017-09-01     100. </span></span>
-<span><span class="co">#&gt; 10 2017-10-01     101. </span></span>
-<span><span class="co">#&gt; # ℹ 27 more rows</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Multiple Series</span></span>
-<span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TP.HKFE02"</span>, <span class="st">"TP.HKFE03"</span><span class="op">)</span></span>
-<span><span class="op">(</span><span class="va">hhpi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbRt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 37 × 3</span></span>
-<span><span class="co">#&gt;    Date       TP_HKFE02 TP_HKFE03</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;         &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2017-01-01      97.5      96.4</span></span>
-<span><span class="co">#&gt;  2 2017-02-01      98.6      97.3</span></span>
-<span><span class="co">#&gt;  3 2017-03-01      99.4      98.6</span></span>
-<span><span class="co">#&gt;  4 2017-04-01      99.8      99.2</span></span>
-<span><span class="co">#&gt;  5 2017-05-01     100.      100. </span></span>
-<span><span class="co">#&gt;  6 2017-06-01     100.      100. </span></span>
-<span><span class="co">#&gt;  7 2017-07-01     100.      100. </span></span>
-<span><span class="co">#&gt;  8 2017-08-01     100.       99.9</span></span>
-<span><span class="co">#&gt;  9 2017-09-01     100.      101. </span></span>
-<span><span class="co">#&gt; 10 2017-10-01     101.      102. </span></span>
-<span><span class="co">#&gt; # ℹ 27 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get year-over-year percent change</span></span>
+<span><span class="va">usd_try_yoy</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_get.html">cbrt_get</a></span><span class="op">(</span></span>
+<span>  series <span class="op">=</span> <span class="st">"TP.DK.USD.A"</span>,</span>
+<span>  start_date <span class="op">=</span> <span class="st">"01-01-2020"</span>,</span>
+<span>  end_date <span class="op">=</span> <span class="st">"01-01-2024"</span>,</span>
+<span>  formulas <span class="op">=</span> <span class="fl">3</span>,  <span class="co"># Year-to-year percent change</span></span>
+<span>  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"EVDS_TOKEN"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Series TP.DK.USD.A: Fetching data in 10 chunks to handle 150 observation limit.</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">usd_try_yoy</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 2</span></span>
+<span><span class="co">#&gt;   Date       `TP_DK_USD_A-3`</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;               &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2020-01-01            NA  </span></span>
+<span><span class="co">#&gt; 2 2020-01-02            12.5</span></span>
+<span><span class="co">#&gt; 3 2020-01-03            11.6</span></span>
+<span><span class="co">#&gt; 4 2020-01-04            NA  </span></span>
+<span><span class="co">#&gt; 5 2020-01-05            NA  </span></span>
+<span><span class="co">#&gt; 6 2020-01-06            NA</span></span></code></pre></div>
+<p>Available formulas: 0 (level), 1 (percentage change), 2 (difference), 3 (year-to-year percent change), 4 (year-to-year differences), 5 (percentage change vs. end-of-previous year), 6 (difference vs. end-of-previous year), 7 (moving average), 8 (moving sum).</p>
 </div>
+<div class="section level3">
+<h3 id="exploring-available-data">Exploring Available Data<a class="anchor" aria-label="anchor" href="#exploring-available-data"></a>
+</h3>
+<p>Use <code><a href="reference/cbrt_meta.html">cbrt_meta()</a></code> to discover available data series:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get all available series metadata</span></span>
+<span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_meta.html">cbrt_meta</a></span><span class="op">(</span>token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"EVDS_TOKEN"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Search for exchange rate series</span></span>
+<span><span class="va">metadata</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"exchange"</span>, <span class="va">SERIE_NAME_ENG</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SERIE_CODE</span>, <span class="va">SERIE_NAME_ENG</span>, <span class="va">FREQUENCY_STR</span>, <span class="va">START_DATE</span>, <span class="va">END_DATE</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="api-v3-support">API v3 Support<a class="anchor" aria-label="anchor" href="#api-v3-support"></a>
+</h2>
+<p>The package handles the EVDS API v3 observation limit automatically:</p>
+<div class="section level3">
+<h3 id="automatic-chunking">Automatic Chunking<a class="anchor" aria-label="anchor" href="#automatic-chunking"></a>
+</h3>
+<p>For large date ranges, the package:</p>
+<ol style="list-style-type: decimal">
+<li>Detects series frequency from API metadata</li>
+<li>Splits the date range into chunks of ≤150 observations</li>
+<li>Fetches data in multiple requests</li>
+<li>Combines results transparently</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># This automatically chunks the request</span></span>
+<span><span class="va">usd_try_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_get.html">cbrt_get</a></span><span class="op">(</span></span>
+<span>  series <span class="op">=</span> <span class="st">"TP.DK.USD.A"</span>,</span>
+<span>  start_date <span class="op">=</span> <span class="st">"01-01-2015"</span>,  <span class="co"># 9+ years of daily data</span></span>
+<span>  end_date <span class="op">=</span> <span class="st">"01-01-2024"</span>,</span>
+<span>  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"EVDS_TOKEN"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Series TP.DK.USD.A: Fetching data in 22 chunks to handle 150 observation limit.</span></span>
+<span></span>
+<span><span class="co"># You'll see messages like:</span></span>
+<span><span class="co"># "Series TP.DK.USD.A: Fetching data in 5 chunks to handle 150 observation limit."</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">usd_try_long</span><span class="op">)</span>  <span class="co"># Returns all data, not limited to 150</span></span>
+<span><span class="co">#&gt; [1] 3288</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="frequency-detection">Frequency Detection<a class="anchor" aria-label="anchor" href="#frequency-detection"></a>
+</h3>
+<p>Series frequencies are detected from metadata API. If detection fails, defaults to daily frequency. Supported frequencies: daily, business days, weekly, bi-monthly, monthly, quarterly, semi-annual, yearly.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="output-formats">Output Formats<a class="anchor" aria-label="anchor" href="#output-formats"></a>
+</h2>
+<p>Choose your preferred output format:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Tibble (default) - for dplyr workflows</span></span>
+<span><span class="va">data_tibble</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span>, as <span class="op">=</span> <span class="st">"tibble"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Tsibble - for time series analysis with fable/feasts</span></span>
+<span><span class="va">data_tsibble</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span>, as <span class="op">=</span> <span class="st">"tsibble"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># data.frame - base R compatibility</span></span>
+<span><span class="va">data_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span>, as <span class="op">=</span> <span class="st">"data.frame"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># data.table - for data.table workflows</span></span>
+<span><span class="va">data_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cbrt_get.html">cbrt_get</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">start_date</span>, <span class="va">end_date</span>, as <span class="op">=</span> <span class="st">"data.table"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<ul>
+<li>Getting Started Guide: <code><a href="articles/getting-started.html">vignette("getting-started")</a></code>
+</li>
+<li>Function Reference: <code><a href="reference/cbrt_get.html">?cbrt_get</a></code>, <code><a href="reference/cbrt_meta.html">?cbrt_meta</a></code>
+</li>
+<li>Package Website: <a href="https://eremrah.com/cbRt/" class="uri">https://eremrah.com/cbRt/</a>
+</li>
+<li>EVDS API: <a href="https://evds3.tcmb.gov.tr/" class="external-link uri">https://evds3.tcmb.gov.tr/</a>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="similar-packages">Similar Packages<a class="anchor" aria-label="anchor" href="#similar-packages"></a>
+</h2>
+<ul>
+<li>
+<a href="https://github.com/etaymaz/CBRT" class="external-link">etaymaz/CBRT</a> - Alternative CBRT data interface</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<p>If you use this package in your research, please cite:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"cbRt"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>See the <a href="CONTRIBUTING.html">contributing guide</a> for details.</p>
+<ul>
+<li>Report bugs or request features: <a href="https://github.com/emraher/cbRt/issues" class="external-link">GitHub Issues</a>
+</li>
+<li>Submit pull requests: <a href="https://github.com/emraher/cbRt/pulls" class="external-link">GitHub Pull Requests</a>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
+</h2>
+<p>This software is in no way affiliated, endorsed, or approved by the Central Bank of the Republic of Turkey (CBRT). It comes with absolutely no warranty.</p>
+<p>Please see the <a href="http://www.tcmb.gov.tr/wps/wcm/connect/TCMB+EN/TCMB+EN/Footer+Menu/Disclaimer" class="external-link">CBRT disclaimer</a> which states: <em>“Information published in this site may be quoted by specific reference thereto, but the use of such information for commercial purposes shall be subject to prior written permission of the CBRT.”</em></p>
+</div>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
+<p>MIT License - see <a href="LICENSE">LICENSE</a> file for details.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -317,6 +319,12 @@
 </ul>
 </div>
 
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+</ul>
+</div>
 
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
@@ -328,30 +336,34 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Emrah Er <br><small class="roles"> Author, maintainer </small>  </li>
+<li>
+<a href="https://eremrah.com" class="external-link">Emrah Er</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9909-7479" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="README_files/figure-gfm/4c3e7750a6a29618a9285cbb1cb165c8afe9987f.svg" alt="lifecycle"></a></li>
+<li><a href="https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="README_files/figure-gfm/0d391edc738fc8ae30c9b1b85658d3b7aa7cff40.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.18381733" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.18381733.svg" alt="DOI"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
 
 
-    <footer><div class="pkgdown-footer-left">
-  <p>Developed by Emrah Er.</p>
+   </div>
+  <footer><div class="container">
+  <div class="pkgdown-footer-left">
+  <p>Developed by <a href="https://eremrah.com" class="external-link">Emrah Er</a>. <strong>Built with ❤️ + ☕ + 🤖.</strong></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
-    </footer>
-</div>
-
-
-
-
-
-  </body>
+  </div></footer>
+</body>
 </html>

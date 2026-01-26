@@ -1,11 +1,18 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://eremrah.com/cbRt/404.html</loc></url>
+<url><loc>https://eremrah.com/cbRt/CBRT_META_VERIFICATION.html</loc></url>
+<url><loc>https://eremrah.com/cbRt/CONTRIBUTING.html</loc></url>
 <url><loc>https://eremrah.com/cbRt/LICENSE-text.html</loc></url>
 <url><loc>https://eremrah.com/cbRt/LICENSE.html</loc></url>
+<url><loc>https://eremrah.com/cbRt/ZENODO_SETUP.html</loc></url>
+<url><loc>https://eremrah.com/cbRt/articles/getting-started.html</loc></url>
+<url><loc>https://eremrah.com/cbRt/articles/index.html</loc></url>
 <url><loc>https://eremrah.com/cbRt/authors.html</loc></url>
 <url><loc>https://eremrah.com/cbRt/index.html</loc></url>
+<url><loc>https://eremrah.com/cbRt/news/index.html</loc></url>
+<url><loc>https://eremrah.com/cbRt/reference/cbRt-package.html</loc></url>
 <url><loc>https://eremrah.com/cbRt/reference/cbRt.html</loc></url>
-<url><loc>https://eremrah.com/cbRt/reference/cbRt_get.html</loc></url>
+<url><loc>https://eremrah.com/cbRt/reference/cbrt_get.html</loc></url>
 <url><loc>https://eremrah.com/cbRt/reference/cbrt_meta.html</loc></url>
 <url><loc>https://eremrah.com/cbRt/reference/cbrt_meta_data.html</loc></url>
 <url><loc>https://eremrah.com/cbRt/reference/get_categories_info.html</loc></url>
