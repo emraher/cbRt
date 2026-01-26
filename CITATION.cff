@@ -3,6 +3,7 @@ message: "If you use this software, please cite it as below."
 type: software
 title: 'cbRt: R Interface to EDDS of CBRT'
 version: 0.3.0
+doi: 10.5281/zenodo.18381733
 authors:
   - family-names: Er
     given-names: Emrah

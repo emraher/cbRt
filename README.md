@@ -7,6 +7,7 @@
 
 [![lifecycle](README_files/figure-gfm/4c3e7750a6a29618a9285cbb1cb165c8afe9987f.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](README_files/figure-gfm/0d391edc738fc8ae30c9b1b85658d3b7aa7cff40.svg)](https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18381733.svg)](https://doi.org/10.5281/zenodo.18381733)
 <!-- badges: end -->
 
 ## Overview
