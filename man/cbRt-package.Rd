@@ -2,6 +2,7 @@
 % Please edit documentation in R/cbRt-package.R
 \docType{package}
 \name{cbRt-package}
+\alias{cbRt}
 \alias{cbRt-package}
 \title{cbRt: R Interface to EDDS of CBRT}
 \description{
