@@ -9,11 +9,14 @@ cbrt_meta(token = NULL)
 \arguments{
 \item{token}{API Key}
 }
+\value{
+A data frame with metadata for all available series
+}
 \description{
 Download information for all available series
 }
 \examples{
 # Download information for all available series
-\dontrun{cbRt_meta(token = APIkey)}
+\dontrun{cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))}
 
 }
