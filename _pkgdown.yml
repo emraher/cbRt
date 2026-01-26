@@ -13,21 +13,7 @@ authors:
     href: https://eremrah.com
 
 navbar:
-  structure:
-    left: [intro, reference, articles, news]
-    right: [github]
-  components:
-    reference:
-      text: Reference
-      href: reference/index.html
-    articles:
-      text: Articles
-      menu:
-      - text: Getting Started
-        href: articles/getting-started.html
-    news:
-      text: News
-      href: news/index.html
+  bg: none
 
 reference:
   - title: Data Retrieval
@@ -38,8 +24,3 @@ reference:
     desc: Functions for retrieving and exploring available data series
     contents:
       - cbrt_meta
-      - cbrt_meta_data
-  - title: Package Documentation
-    contents:
-      - cbRt-package
-      - cbRt

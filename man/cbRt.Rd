@@ -14,3 +14,4 @@ Bank of the Republic of Turkey (CBRT) and/or data produced by other
 institutions and compiled by the CBRT.
 Datasets can be accessed through \code{cbRt} functions.
 }
+\keyword{internal}

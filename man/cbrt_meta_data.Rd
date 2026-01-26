@@ -16,8 +16,9 @@ CBRT EDDS Series Information Data
 \examples{
 
 \dontrun{data(cbrt_meta_data)
-cbrt_meta_data \%>\%
-  dplyr::filter(SERIE_CODE \%in\% series) \%>\%
+cbrt_meta_data |>
+  dplyr::filter(SERIE_CODE \%in\% series) |>
  dplyr::select(SERIE_CODE, FREQUENCY_STR)}
 }
 \keyword{datasets}
+\keyword{internal}

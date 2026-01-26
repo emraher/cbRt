@@ -180,8 +180,8 @@ cbrt_get <- function(series,
   })
 
   # Now combine all series using full_join
-  df <- purrr::reduce(df_combined, dplyr::full_join, by = "Date") %>%
-    dplyr::arrange(.data$Date) %>%
+  df <- purrr::reduce(df_combined, dplyr::full_join, by = "Date") |>
+    dplyr::arrange(.data$Date) |>
     janitor::remove_empty(which = "cols") # Remove empty (all NA) columns
 
   # Check if any series returned exactly 150 observations (potential truncation)

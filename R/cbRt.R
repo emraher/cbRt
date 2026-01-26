@@ -9,6 +9,7 @@
 #' institutions and compiled by the CBRT.
 #' Datasets can be accessed through \code{cbRt} functions.
 #' @name cbRt
+#' @keywords internal
 #'
 #' @import httr
 #' @import jsonlite

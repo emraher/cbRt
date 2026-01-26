@@ -26,7 +26,7 @@ get_groups_info <- function(token = NULL, category_id = NULL) {
     url <- paste0(urlroot, "mode=2&code=", category_id, "&type=json")
     doc <- cbrt_geturl(url, token = token)
     doc <- jsonlite::fromJSON(httr::content(doc, as = "text", encoding = "UTF-8"))
-    doc <- doc %>% dplyr::select(CATEGORY_ID, DATAGROUP_CODE,
+    doc <- doc |> dplyr::select(CATEGORY_ID, DATAGROUP_CODE,
                                  DATAGROUP_NAME_ENG, FREQUENCY,
                                  START_DATE, END_DATE,
                                  tidyselect::everything())
@@ -34,7 +34,7 @@ get_groups_info <- function(token = NULL, category_id = NULL) {
     url <- paste0(urlroot, "mode=0&type=json")
     doc <- cbrt_geturl(url, token = token)
     doc <- jsonlite::fromJSON(httr::content(doc, as = "text", encoding = "UTF-8"))
-    doc <- doc %>% dplyr::select(CATEGORY_ID, DATAGROUP_CODE,
+    doc <- doc |> dplyr::select(CATEGORY_ID, DATAGROUP_CODE,
                                  DATAGROUP_NAME_ENG, FREQUENCY,
                                  START_DATE, END_DATE,
                                  tidyselect::everything())
@@ -56,7 +56,7 @@ get_series_info <- function(token = NULL, code) {
   url <- paste0(urlroot, "type=json&code=", code)
   doc <- cbrt_geturl(url, token = token)
   doc <- jsonlite::fromJSON(httr::content(doc, as = "text", encoding = "UTF-8"))
-  doc <- doc %>% dplyr::select(DATAGROUP_CODE, SERIE_CODE,
+  doc <- doc |> dplyr::select(DATAGROUP_CODE, SERIE_CODE,
                                SERIE_NAME_ENG, FREQUENCY_STR,
                                START_DATE, END_DATE,
                                tidyselect::everything())
@@ -390,7 +390,7 @@ json_read_res <- function(res) {
   names(df)[names(df) == "UNIXTIME"] <- "Date"
 
   # Reorder columns
-  df <- df %>% dplyr::select(Date, tidyselect::everything())
+  df <- df |> dplyr::select(Date, tidyselect::everything())
 
   return(df)
 }
