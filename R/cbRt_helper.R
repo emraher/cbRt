@@ -6,7 +6,7 @@
 # Get Categories----
 # -------------------------------------------------------------------------- ###
 get_categories_info <- function(token = NULL) {
-  if (is.null(token)) CBRTKey <- myCBRTKey <- Sys.getenv("EVDS_TOKEN")
+  if (is.null(token)) token <- Sys.getenv("EVDS_TOKEN")
   urlroot <- "https://evds3.tcmb.gov.tr/igmevdsms-dis/categories/"
   url <- paste0(urlroot, "type=json")
   doc <- cbrt_geturl(url, token = token)

@@ -1,0 +1,15 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "cbRt: R Interface to EDDS of CBRT",
+  author   = person("Emrah", "Er", email = "eer@eremrah.com",
+                    comment = c(ORCID = "0000-0001-9909-7479")),
+  year     = 2026,
+  note     = "R package version 0.3.0",
+  url      = "https://eremrah.com/cbRt/",
+  textVersion = paste(
+    "Er, E. (2026).",
+    "cbRt: R Interface to EDDS of CBRT.",
+    "R package version 0.3.0.",
+    "https://eremrah.com/cbRt/"
+  )
+)

@@ -7,6 +7,10 @@
 ^pkgdown$
 ^cran-comments\.md$
 ^CITATION\.cff$
+^\.zenodo\.json$
+^ZENODO_SETUP\.md$
+^test_cbrt_meta\.R$
+^CBRT_META_VERIFICATION\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$

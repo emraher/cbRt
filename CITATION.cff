@@ -7,7 +7,16 @@ authors:
   - family-names: Er
     given-names: Emrah
     email: eer@eremrah.com
+    orcid: 'https://orcid.org/0000-0001-9909-7479'
 repository-code: 'https://github.com/emraher/cbRt'
 url: 'https://eremrah.com/cbRt/'
+date-released: '2026-01-27'
 abstract: An R interface to the Electronic Data Delivery System (EVDS) of the Central Bank of the Republic of Turkey (CBRT). Provides functions to retrieve economic data and metadata from the EVDS API v3, with automatic handling of the 150 observation limit through intelligent chunking.
 license: MIT
+keywords:
+  - R
+  - economic-data
+  - central-bank
+  - Turkey
+  - EVDS
+  - API

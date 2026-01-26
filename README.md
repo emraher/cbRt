@@ -7,29 +7,26 @@
 
 [![lifecycle](README_files/figure-gfm/4c3e7750a6a29618a9285cbb1cb165c8afe9987f.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](README_files/figure-gfm/0d391edc738fc8ae30c9b1b85658d3b7aa7cff40.svg)](https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](README_files/figure-gfm/0751cb25c61484fc1cb407e24701a2f170a279e5.svg)](https://app.codecov.io/gh/emraher/cbRt?branch=main)
 <!-- badges: end -->
 
 ## Overview
 
 `cbRt` provides an R interface to the Electronic Data Delivery System
 (EVDS) of the Central Bank of the Republic of Turkey (CBRT). The package
-enables easy access to a rich collection of economic data including
-exchange rates, interest rates, inflation indicators, and more.
+enables easy access to economic data including exchange rates, interest
+rates, and inflation indicators.
 
-**Key Features:**
+**Features:**
 
-- ✅ **Full EVDS API v3 support** with automatic handling of the 150
+- Full EVDS API v3 support with automatic handling of the 150
   observation limit
-- ✅ **Intelligent chunking** - automatically splits large date ranges
-  into multiple requests
-- ✅ **Hybrid frequency detection** - detects series frequency from
-  metadata with fallback
-- ✅ **Multiple output formats** - tibble, tsibble, data.frame, or
-  data.table
-- ✅ **Formula transformations** - apply calculations at the API level
-- ✅ **Clean data handling** - automatic conversion of ND values to NA
+- Intelligent chunking - automatically splits large date ranges into
+  multiple requests
+- Hybrid frequency detection - detects series frequency from metadata
+  with fallback
+- Multiple output formats - tibble, tsibble, data.frame, or data.table
+- Formula transformations - apply calculations at the API level
+- Clean data handling - automatic conversion of ND values to NA
 
 ## Installation
 
@@ -77,8 +74,18 @@ usd_try <- cbrt_get(
   end_date = "01-01-2024",
   token = Sys.getenv("EVDS_TOKEN")
 )
+#> Series TP.DK.USD.A: Fetching data in 10 chunks to handle 150 observation limit.
 
 head(usd_try)
+#> # A tibble: 6 × 2
+#>   Date       TP_DK_USD_A
+#>   <date>           <dbl>
+#> 1 2020-01-01       NA   
+#> 2 2020-01-02        5.94
+#> 3 2020-01-03        5.95
+#> 4 2020-01-04       NA   
+#> 5 2020-01-05       NA   
+#> 6 2020-01-06        5.96
 ```
 
 ### Multiple Series
@@ -94,11 +101,23 @@ exchange_rates <- cbrt_get(
   end_date = "01-01-2024",
   token = Sys.getenv("EVDS_TOKEN")
 )
+#> Series TP.DK.USD.A: Fetching data in 3 chunks to handle 150 observation limit.
+#> Series TP.DK.EUR.A: Fetching data in 3 chunks to handle 150 observation limit.
+#> Series TP.DK.GBP.A: Fetching data in 3 chunks to handle 150 observation limit.
+
+head(exchange_rates)
+#> # A tibble: 6 × 4
+#>   Date       TP_DK_EUR_A TP_DK_GBP_A TP_DK_USD_A
+#>   <date>           <dbl>       <dbl>       <dbl>
+#> 1 2023-01-01        NA          NA          NA  
+#> 2 2023-01-02        19.9        22.5        18.7
+#> 3 2023-01-03        20.0        22.5        18.7
+#> 4 2023-01-04        19.8        22.3        18.7
+#> 5 2023-01-05        19.8        22.5        18.7
+#> 6 2023-01-06        19.9        22.5        18.7
 ```
 
 ### Applying Formulas
-
-Transform your data with built-in formulas:
 
 ``` r
 # Get year-over-year percent change
@@ -109,19 +128,24 @@ usd_try_yoy <- cbrt_get(
   formulas = 3,  # Year-to-year percent change
   token = Sys.getenv("EVDS_TOKEN")
 )
+#> Series TP.DK.USD.A: Fetching data in 10 chunks to handle 150 observation limit.
+
+head(usd_try_yoy)
+#> # A tibble: 6 × 2
+#>   Date       `TP_DK_USD_A-3`
+#>   <date>               <dbl>
+#> 1 2020-01-01            NA  
+#> 2 2020-01-02            12.5
+#> 3 2020-01-03            11.6
+#> 4 2020-01-04            NA  
+#> 5 2020-01-05            NA  
+#> 6 2020-01-06            NA
 ```
 
-**Available formulas:**
-
-- **0**: Level (default)
-- **1**: Percentage change
-- **2**: Difference
-- **3**: Year-to-year Percent Change
-- **4**: Year-to-year Differences
-- **5**: Percentage Change Compared to End-of-Previous Year
-- **6**: Difference Compared to End-of-Previous Year
-- **7**: Moving Average
-- **8**: Moving Sum
+Available formulas: 0 (level), 1 (percentage change), 2 (difference), 3
+(year-to-year percent change), 4 (year-to-year differences), 5
+(percentage change vs. end-of-previous year), 6 (difference
+vs. end-of-previous year), 7 (moving average), 8 (moving sum).
 
 ### Exploring Available Data
 
@@ -140,19 +164,18 @@ metadata %>%
   head()
 ```
 
-## New in v0.3.0: API v3 Support
+## API v3 Support
 
-The package now fully supports EVDS API v3 with automatic handling of
-the 150 observation limit:
+The package handles the EVDS API v3 observation limit automatically:
 
 ### Automatic Chunking
 
-When you request large date ranges, the package automatically:
+For large date ranges, the package:
 
-1.  **Detects series frequency** from API metadata
-2.  **Splits the date range** into chunks of ≤150 observations
-3.  **Fetches data** in multiple requests
-4.  **Combines results** transparently
+1.  Detects series frequency from API metadata
+2.  Splits the date range into chunks of ≤150 observations
+3.  Fetches data in multiple requests
+4.  Combines results transparently
 
 ``` r
 # This automatically chunks the request
@@ -162,21 +185,20 @@ usd_try_long <- cbrt_get(
   end_date = "01-01-2024",
   token = Sys.getenv("EVDS_TOKEN")
 )
+#> Series TP.DK.USD.A: Fetching data in 22 chunks to handle 150 observation limit.
 
 # You'll see messages like:
 # "Series TP.DK.USD.A: Fetching data in 5 chunks to handle 150 observation limit."
 
 nrow(usd_try_long)  # Returns all data, not limited to 150
+#> [1] 3288
 ```
 
-### Hybrid Frequency Detection
+### Frequency Detection
 
-The package intelligently detects series frequencies:
-
-- **Primary**: Queries metadata API for frequency information
-- **Fallback**: Uses conservative daily frequency if detection fails
-- **Supports**: Daily, business days, weekly, bi-monthly, monthly,
-  quarterly, semi-annual, yearly
+Series frequencies are detected from metadata API. If detection fails,
+defaults to daily frequency. Supported frequencies: daily, business
+days, weekly, bi-monthly, monthly, quarterly, semi-annual, yearly.
 
 ## Output Formats
 
@@ -198,11 +220,10 @@ data_dt <- cbrt_get(series, start_date, end_date, as = "data.table")
 
 ## Documentation
 
-- **Getting Started Guide**: See `vignette("getting-started")` for
-  comprehensive examples
-- **Function Reference**: `?cbrt_get`, `?cbrt_meta`
-- **Package Website**: <https://eremrah.com/cbRt/>
-- **EVDS API**: <https://evds3.tcmb.gov.tr/>
+- Getting Started Guide: `vignette("getting-started")`
+- Function Reference: `?cbrt_get`, `?cbrt_meta`
+- Package Website: <https://eremrah.com/cbRt/>
+- EVDS API: <https://evds3.tcmb.gov.tr/>
 
 ## Similar Packages
 
@@ -219,8 +240,7 @@ citation("cbRt")
 
 ## Contributing
 
-Contributions are welcome! Please see the [contributing
-guide](CONTRIBUTING.md) for details.
+See the [contributing guide](CONTRIBUTING.md) for details.
 
 - Report bugs or request features: [GitHub
   Issues](https://github.com/emraher/cbRt/issues)
