@@ -57,8 +57,7 @@ relevant series.}
 \item{token}{API key
 
 \code{token} argument is the required API key.
-See \url{https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf}
-for instructions to obtain the API key.}
+See \url{https://evds3.tcmb.gov.tr/} for instructions to obtain the API key.}
 
 \item{nd}{Convert ND values to NA
 
@@ -78,6 +77,23 @@ A data frame (tibble, tsibble, data.frame, or data.table)
 \description{
 Get the series from CBRT
 }
+\section{API v3 Changes}{
+
+The CBRT EVDS API v3 has a 150 observation limit per request. This function
+automatically handles this limit by:
+\itemize{
+\item Detecting series frequency from metadata (with fallback to daily)
+\item Splitting large date ranges into chunks of max 150 observations
+\item Fetching data in multiple requests when necessary
+\item Combining chunks transparently for the user
+}
+
+For very large date ranges with high-frequency data (daily, business days),
+data will be fetched in multiple chunks. Progress messages will inform you
+when chunking occurs. Consider using aggregation formulas or narrower date
+ranges for better performance.
+}
+
 \examples{
 # Download the given series for the given dates
 \dontrun{cbrt_get(series = "TP.DK.USD.A",

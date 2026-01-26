@@ -42,8 +42,22 @@
 #' @param token API key
 #'
 #' \code{token} argument is the required API key.
-#' See <https://evds2.tcmb.gov.tr/help/videos/EVDS_Web_Service_Usage_Guide.pdf>
-#' for instructions to obtain the API key.
+#' See <https://evds3.tcmb.gov.tr/> for instructions to obtain the API key.
+#'
+#' @section API v3 Changes:
+#' The CBRT EVDS API v3 has a 150 observation limit per request. This function
+#' automatically handles this limit by:
+#' \itemize{
+#'   \item Detecting series frequency from metadata (with fallback to daily)
+#'   \item Splitting large date ranges into chunks of max 150 observations
+#'   \item Fetching data in multiple requests when necessary
+#'   \item Combining chunks transparently for the user
+#' }
+#'
+#' For very large date ranges with high-frequency data (daily, business days),
+#' data will be fetched in multiple chunks. Progress messages will inform you
+#' when chunking occurs. Consider using aggregation formulas or narrower date
+#' ranges for better performance.
 #'
 #' @param nd Convert ND values to NA
 #'
@@ -83,17 +97,50 @@ cbrt_get <- function(series,
   # I don't want conversion.
   # I have to get all data and combine series myself.
 
+  # EVDS API v3 has 150 observation limit per request
+  # Need to detect frequency and chunk date ranges if necessary
+
+  # Create a nested structure: series x chunks
+  series_chunks <- purrr::map(series, function(s) {
+    # Get series frequency (with fallback to daily)
+    freq <- get_series_frequency(s, token)
+
+    # Calculate date chunks needed
+    chunks_df <- calculate_date_chunks(start_date, end_date, freq)
+
+    # Add series code to each chunk
+    chunks_df$series <- s
+
+    # Inform user if chunking is happening
+    if (nrow(chunks_df) > 1) {
+      message(sprintf("Series %s: Fetching data in %d chunks to handle 150 observation limit.",
+                      s, nrow(chunks_df)))
+    }
+
+    return(chunks_df)
+  })
+
+  # Flatten to get all series-chunk combinations
+  all_chunks <- do.call(rbind, series_chunks)
+
+  # Generate URLs for each series-chunk combination
   if (is.null(formulas)) {
-    url <- purrr::map(.x = series,
-                      .f = ~ cbrt_url(.x, token, start_date, end_date))
+    url <- purrr::pmap(
+      list(all_chunks$series, all_chunks$chunk_start, all_chunks$chunk_end),
+      function(s, start, end) cbrt_url(s, token, start, end)
+    )
   } else {
-    url <- purrr::map2(.x = series,
-                       .y = formulas,
-                       .f = ~ cbrt_url(.x, token, start_date, end_date, .y))
+    # Match formulas to series (repeat formulas if needed)
+    formulas_expanded <- rep_len(formulas, length(series))
+    all_chunks$formula <- formulas_expanded[match(all_chunks$series, series)]
+
+    url <- purrr::pmap(
+      list(all_chunks$series, all_chunks$chunk_start, all_chunks$chunk_end, all_chunks$formula),
+      function(s, start, end, f) cbrt_url(s, token, start, end, f)
+    )
   }
 
-
-
+  # Fetch all URLs
   res <- purrr::map(.x = url, .f = ~ cbrt_geturl(.x, token))
 
   # We need to Check response for all urls.
@@ -103,17 +150,47 @@ cbrt_get <- function(series,
 
   if (any(scodes != 200)) {
     stop("Bad Request!\n", "Please check if function arguments are correct!\n",
-         "For series ",
+         "For series-chunk combination(s) ",
          paste(which(scodes != 200), collapse = ", "),
          " request returned error codes ",
          paste(scodes[which(scodes != 200)], collapse = ", "),
          " respectively.\n\n")
   }
 
-  df <- purrr::map(.x = res, .f = ~ json_read_res(.x)) %>%
-    purrr::reduce(dplyr::full_join, by = "Date") %>%
+  # Parse all responses
+  df_list <- purrr::map(.x = res, .f = ~ json_read_res(.x))
+
+  # Group by series and combine chunks for each series
+  # Add series identifier to each chunk
+  for (i in seq_along(df_list)) {
+    df_list[[i]]$series_id <- all_chunks$series[i]
+  }
+
+  # Combine chunks by series, then combine all series
+  df_by_series <- split(df_list, sapply(df_list, function(x) x$series_id[1]))
+
+  df_combined <- purrr::map(df_by_series, function(series_dfs) {
+    # Combine all chunks for this series
+    combined <- dplyr::bind_rows(series_dfs)
+    # Remove duplicates (in case of overlapping dates)
+    combined <- dplyr::distinct(combined, Date, .keep_all = TRUE)
+    # Remove series_id column
+    combined$series_id <- NULL
+    return(combined)
+  })
+
+  # Now combine all series using full_join
+  df <- purrr::reduce(df_combined, dplyr::full_join, by = "Date") %>%
     dplyr::arrange(.data$Date) %>%
     janitor::remove_empty(which = "cols") # Remove empty (all NA) columns
+
+  # Check if any series returned exactly 150 observations (potential truncation)
+  for (series_df in df_combined) {
+    if (nrow(series_df) == 150) {
+      warning("One or more data chunks returned exactly 150 observations. ",
+              "Data may be at the limit. Consider verifying completeness.")
+    }
+  }
 
 
   # Convert ND
