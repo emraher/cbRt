@@ -16,10 +16,10 @@ An object of class `"tibble"`
 
 ``` r
 if (FALSE) data(cbrt_meta_data)
-cbrt_meta_data %>%
-  dplyr::filter(SERIE_CODE %in% series) %>%
+cbrt_meta_data |>
+  dplyr::filter(SERIE_CODE %in% series) |>
  dplyr::select(SERIE_CODE, FREQUENCY_STR) # \dontrun{}
-#> Error in dplyr::filter(., SERIE_CODE %in% series): ℹ In argument: `SERIE_CODE %in% series`.
+#> Error in dplyr::filter(cbrt_meta_data, SERIE_CODE %in% series): ℹ In argument: `SERIE_CODE %in% series`.
 #> Caused by error:
 #> ! object 'series' not found
 ```
