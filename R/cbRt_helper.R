@@ -337,9 +337,6 @@ cbrt_url <- function(series,
     stop("You must provide series, start and end dates, and API token!")
   }
 
-  # TODO -----------------------------------------------------------------------
-  # Check if date format is correct
-
   # Create URLs
   series_url <- paste0("series=", paste(series, collapse = "-"))
   start_date_url <- paste0("&startDate=", start_date)
