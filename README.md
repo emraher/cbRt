@@ -6,8 +6,10 @@
 <!-- badges: start -->
 
 [![lifecycle](README_files/figure-gfm/4c3e7750a6a29618a9285cbb1cb165c8afe9987f.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![R-CMD-check](README_files/figure-gfm/0d391edc738fc8ae30c9b1b85658d3b7aa7cff40.svg)](https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18381733.svg)](https://doi.org/10.5281/zenodo.18381733)
+[![R-CMD-check](README_files/figure-gfm/b3976c6f4514e05c072654df427b2fac2113286a.svg)](https://github.com/emraher/cbRt/actions/workflows/R-CMD-check.yaml)
+[<span class="image placeholder"
+original-image-src="https://zenodo.org/badge/DOI/10.5281/zenodo.18381733.svg"
+original-image-title="">DOI</span>](https://doi.org/10.5281/zenodo.18381733)
 <!-- badges: end -->
 
 ## Overview
@@ -255,7 +257,7 @@ Central Bank of the Republic of Turkey (CBRT). It comes with absolutely
 no warranty.
 
 Please see the [CBRT
-disclaimer](http://www.tcmb.gov.tr/wps/wcm/connect/TCMB+EN/TCMB+EN/Footer+Menu/Disclaimer)
+disclaimer](https://www.tcmb.gov.tr/wps/wcm/connect/TCMB+EN/TCMB+EN/Footer+Menu/Disclaimer)
 which states: *“Information published in this site may be quoted by
 specific reference thereto, but the use of such information for
 commercial purposes shall be subject to prior written permission of the

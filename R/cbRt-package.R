@@ -10,4 +10,5 @@
 #' @docType package
 #' @name cbRt-package
 #' @keywords internal
+#' @importFrom rlang .data
 "_PACKAGE"
