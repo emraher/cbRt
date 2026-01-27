@@ -4,6 +4,13 @@
 #'
 #' @return A data frame with metadata for all available series
 #'
+#' @section Updating the bundled data:
+#' To update the bundled \code{cbrt_meta_data} dataset with fresh metadata from the API:
+#' \preformatted{
+#' cbrt_meta_data <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
+#' usethis::use_data(cbrt_meta_data, overwrite = TRUE)
+#' }
+#'
 #' @examples
 #' \dontrun{
 #' library(dplyr)

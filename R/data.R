@@ -19,13 +19,6 @@
 #'
 #' @keywords datasets
 #'
-#' @section Updating the bundled data:
-#' To update this dataset with fresh metadata from the API:
-#' \preformatted{
-#' cbrt_meta_data <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
-#' usethis::use_data(cbrt_meta_data, overwrite = TRUE)
-#' }
-#'
 #' @seealso \code{\link{cbrt_meta}} to fetch fresh metadata from the API
 #'
 #' @examples

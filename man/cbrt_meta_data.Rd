@@ -22,15 +22,6 @@ A bundled dataset containing metadata for all available CBRT EVDS series.
 This is a snapshot of metadata that ships with the package for offline
 reference. For the most up-to-date metadata, use \code{cbrt_meta()}.
 }
-\section{Updating the bundled data}{
-
-To update this dataset with fresh metadata from the API:
-\preformatted{
-cbrt_meta_data <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
-usethis::use_data(cbrt_meta_data, overwrite = TRUE)
-}
-}
-
 \examples{
 # Load bundled metadata
 data(cbrt_meta_data)

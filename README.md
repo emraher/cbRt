@@ -152,18 +152,33 @@ vs. end-of-previous year), 7 (moving average), 8 (moving sum).
 
 ### Exploring Available Data
 
-Use `cbrt_meta()` to discover available data series:
+The package includes bundled metadata for all available series, so you
+can explore data offline:
 
 ``` r
 library(dplyr)
+library(stringr)
 
-# Get all available series metadata
-metadata <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
+# Use bundled metadata (no API call needed)
+data(cbrt_meta_data)
 
 # Search for exchange rate series
-metadata %>%
-  filter(grepl("exchange", SERIE_NAME_ENG, ignore.case = TRUE)) %>%
+cbrt_meta_data %>%
+  filter(str_detect(SERIE_NAME_ENG, regex("exchange", ignore_case = TRUE))) %>%
   select(SERIE_CODE, SERIE_NAME_ENG, FREQUENCY_STR, START_DATE, END_DATE) %>%
+  head()
+```
+
+Or fetch the latest metadata directly from the API:
+
+``` r
+# Get fresh metadata from API
+metadata <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
+
+# Search for specific series
+metadata %>%
+  filter(str_detect(SERIE_CODE, "USD")) %>%
+  select(SERIE_CODE, SERIE_NAME_ENG, FREQUENCY_STR) %>%
   head()
 ```
 

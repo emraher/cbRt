@@ -24,3 +24,4 @@ reference:
     desc: Functions for retrieving and exploring available data series
     contents:
       - cbrt_meta
+      - cbrt_meta_data
