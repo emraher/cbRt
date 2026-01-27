@@ -13,3 +13,5 @@ Functions for retrieving and exploring available data series
 
 - [`cbrt_meta()`](https://eremrah.com/cbRt/reference/cbrt_meta.md) :
   Download information for all available series
+- [`cbrt_meta_data`](https://eremrah.com/cbRt/reference/cbrt_meta_data.md)
+  : CBRT EDDS Series Information Data

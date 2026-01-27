@@ -107,9 +107,24 @@ narrower date ranges for better performance.
 ## Examples
 
 ``` r
-# Download the given series for the given dates
-if (FALSE) cbrt_get(series = "TP.DK.USD.A",
-                  start_date = "01-01-2017",
-                  end_date = "01-01-2018",
-                  token = APIkey) # \dontrun{}
+if (FALSE) { # \dontrun{
+library(dplyr)
+
+# Download USD/TRY exchange rate
+usd_try <- cbrt_get(
+  series = "TP.DK.USD.A",
+  start_date = "01-01-2023",
+  end_date = "01-01-2024",
+  token = Sys.getenv("EVDS_TOKEN")
+)
+
+# Multiple series with formulas
+exchange_rates <- cbrt_get(
+  series = c("TP.DK.USD.A", "TP.DK.EUR.A"),
+  start_date = "01-01-2023",
+  end_date = "01-01-2024",
+  formulas = c(0, 3),  # Level for USD, YoY % change for EUR
+  token = Sys.getenv("EVDS_TOKEN")
+)
+} # }
 ```

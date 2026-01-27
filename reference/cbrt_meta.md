@@ -18,9 +18,32 @@ cbrt_meta(token = NULL)
 
 A data frame with metadata for all available series
 
+## Updating the bundled data
+
+To update the bundled `cbrt_meta_data` dataset with fresh metadata from
+the API:
+
+    cbrt_meta_data <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
+    usethis::use_data(cbrt_meta_data, overwrite = TRUE)
+
 ## Examples
 
 ``` r
-# Download information for all available series
-if (FALSE) cbrt_meta(token = Sys.getenv("EVDS_TOKEN")) # \dontrun{}
+if (FALSE) { # \dontrun{
+library(dplyr)
+library(stringr)
+
+# Get all available series metadata
+metadata <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
+
+# Search for exchange rate series
+metadata |>
+  filter(str_detect(SERIE_NAME_ENG, regex("exchange|currency", ignore_case = TRUE))) |>
+  select(SERIE_CODE, SERIE_NAME_ENG, FREQUENCY_STR, START_DATE, END_DATE) |>
+  head(10)
+
+# Find specific series
+metadata |>
+  filter(SERIE_CODE == "TP.DK.USD.A")
+} # }
 ```

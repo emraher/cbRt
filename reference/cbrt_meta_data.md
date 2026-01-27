@@ -1,6 +1,9 @@
 # CBRT EDDS Series Information Data
 
-CBRT EDDS Series Information Data
+A bundled dataset containing metadata for all available CBRT EVDS
+series. This is a snapshot of metadata that ships with the package for
+offline reference. For the most up-to-date metadata, use
+[`cbrt_meta()`](https://eremrah.com/cbRt/reference/cbrt_meta.md).
 
 ## Usage
 
@@ -10,16 +13,46 @@ data(cbrt_meta_data)
 
 ## Format
 
-An object of class `"tibble"`
+A tibble with metadata for all available series including:
+
+- SERIE_CODE:
+
+  Series code (e.g., "TP.DK.USD.A")
+
+- SERIE_NAME_ENG:
+
+  Series name in English
+
+- FREQUENCY_STR:
+
+  Data frequency (e.g., "Daily", "Monthly")
+
+- START_DATE:
+
+  Series start date
+
+- END_DATE:
+
+  Series end date
+
+## See also
+
+[`cbrt_meta`](https://eremrah.com/cbRt/reference/cbrt_meta.md) to fetch
+fresh metadata from the API
 
 ## Examples
 
 ``` r
-if (FALSE) data(cbrt_meta_data)
+# Load bundled metadata
+data(cbrt_meta_data)
+
+# Search for USD exchange rate series
+if (FALSE) { # \dontrun{
+library(dplyr)
+library(stringr)
+
 cbrt_meta_data |>
-  dplyr::filter(SERIE_CODE %in% series) |>
- dplyr::select(SERIE_CODE, FREQUENCY_STR) # \dontrun{}
-#> Error in dplyr::filter(cbrt_meta_data, SERIE_CODE %in% series): ℹ In argument: `SERIE_CODE %in% series`.
-#> Caused by error:
-#> ! object 'series' not found
+  filter(str_detect(SERIE_CODE, "USD")) |>
+  select(SERIE_CODE, SERIE_NAME_ENG, FREQUENCY_STR)
+} # }
 ```
