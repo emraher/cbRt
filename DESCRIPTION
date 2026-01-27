@@ -20,7 +20,8 @@ Suggests:
     testthat (>= 3.0.0),
     knitr (>= 1.19),
     rmarkdown (>= 1.8.10),
-    pkgdown
+    pkgdown,
+    stringr
 Imports:
     rlang (>= 0.1.2),
     anytime (>= 0.3.0),

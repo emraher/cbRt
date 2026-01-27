@@ -34,8 +34,11 @@
 #'
 #' # Search for USD exchange rate series
 #' \dontrun{
+#' library(dplyr)
+#' library(stringr)
+#'
 #' cbrt_meta_data |>
-#'   dplyr::filter(grepl("USD", SERIE_CODE)) |>
-#'   dplyr::select(SERIE_CODE, SERIE_NAME_ENG, FREQUENCY_STR)
+#'   filter(str_detect(SERIE_CODE, "USD")) |>
+#'   select(SERIE_CODE, SERIE_NAME_ENG, FREQUENCY_STR)
 #' }
 "cbrt_meta_data"

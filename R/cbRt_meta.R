@@ -5,8 +5,23 @@
 #' @return A data frame with metadata for all available series
 #'
 #' @examples
-#' # Download information for all available series
-#' \dontrun{cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))}
+#' \dontrun{
+#' library(dplyr)
+#' library(stringr)
+#'
+#' # Get all available series metadata
+#' metadata <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
+#'
+#' # Search for exchange rate series
+#' metadata |>
+#'   filter(str_detect(SERIE_NAME_ENG, regex("exchange|currency", ignore_case = TRUE))) |>
+#'   select(SERIE_CODE, SERIE_NAME_ENG, FREQUENCY_STR, START_DATE, END_DATE) |>
+#'   head(10)
+#'
+#' # Find specific series
+#' metadata |>
+#'   filter(SERIE_CODE == "TP.DK.USD.A")
+#' }
 #'
 #' @export
 # -------------------------------------------------------------------------- ###
