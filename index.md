@@ -250,7 +250,7 @@ Central Bank of the Republic of Turkey (CBRT). It comes with absolutely
 no warranty.
 
 Please see the [CBRT
-disclaimer](http://www.tcmb.gov.tr/wps/wcm/connect/TCMB+EN/TCMB+EN/Footer+Menu/Disclaimer)
+disclaimer](https://www.tcmb.gov.tr/wps/wcm/connect/TCMB+EN/TCMB+EN/Footer+Menu/Disclaimer)
 which states: *“Information published in this site may be quoted by
 specific reference thereto, but the use of such information for
 commercial purposes shall be subject to prior written permission of the
