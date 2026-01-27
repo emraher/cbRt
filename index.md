@@ -65,7 +65,6 @@ usd_try <- cbrt_get(
   end_date = "01-01-2024",
   token = Sys.getenv("EVDS_TOKEN")
 )
-#> Series TP.DK.USD.A: Fetching data in 10 chunks to handle 150 observation limit.
 
 head(usd_try)
 #> # A tibble: 6 × 2
@@ -92,20 +91,17 @@ exchange_rates <- cbrt_get(
   end_date = "01-01-2024",
   token = Sys.getenv("EVDS_TOKEN")
 )
-#> Series TP.DK.USD.A: Fetching data in 3 chunks to handle 150 observation limit.
-#> Series TP.DK.EUR.A: Fetching data in 3 chunks to handle 150 observation limit.
-#> Series TP.DK.GBP.A: Fetching data in 3 chunks to handle 150 observation limit.
 
 head(exchange_rates)
 #> # A tibble: 6 × 4
-#>   Date       TP_DK_EUR_A TP_DK_GBP_A TP_DK_USD_A
+#>   Date       TP_DK_USD_A TP_DK_EUR_A TP_DK_GBP_A
 #>   <date>           <dbl>       <dbl>       <dbl>
 #> 1 2023-01-01        NA          NA          NA  
-#> 2 2023-01-02        19.9        22.5        18.7
-#> 3 2023-01-03        20.0        22.5        18.7
-#> 4 2023-01-04        19.8        22.3        18.7
-#> 5 2023-01-05        19.8        22.5        18.7
-#> 6 2023-01-06        19.9        22.5        18.7
+#> 2 2023-01-02        18.7        19.9        22.5
+#> 3 2023-01-03        18.7        20.0        22.5
+#> 4 2023-01-04        18.7        19.8        22.3
+#> 5 2023-01-05        18.7        19.8        22.5
+#> 6 2023-01-06        18.7        19.9        22.5
 ```
 
 ### Applying Formulas
@@ -119,7 +115,6 @@ usd_try_yoy <- cbrt_get(
   formulas = 3,  # Year-to-year percent change
   token = Sys.getenv("EVDS_TOKEN")
 )
-#> Series TP.DK.USD.A: Fetching data in 10 chunks to handle 150 observation limit.
 
 head(usd_try_yoy)
 #> # A tibble: 6 × 2
@@ -191,7 +186,6 @@ usd_try_long <- cbrt_get(
   end_date = "01-01-2024",
   token = Sys.getenv("EVDS_TOKEN")
 )
-#> Series TP.DK.USD.A: Fetching data in 22 chunks to handle 150 observation limit.
 
 # You'll see messages like:
 # "Series TP.DK.USD.A: Fetching data in 5 chunks to handle 150 observation limit."
