@@ -12,6 +12,7 @@ package.
 You can install `cbRt` from GitHub:
 
 ``` r
+
 # Install from GitHub
 # install.packages("devtools")
 devtools::install_github("emraher/cbRt")
@@ -30,6 +31,7 @@ To use the CBRT EVDS API, you need an API token. Follow these steps:
 You can store your token in your `.Renviron` file for persistent access:
 
 ``` r
+
 # Add this line to your .Renviron file
 # You can edit it with: usethis::edit_r_environ()
 EVDS_TOKEN = "your_api_key_here"
@@ -38,6 +40,7 @@ EVDS_TOKEN = "your_api_key_here"
 Alternatively, set it for the current session:
 
 ``` r
+
 Sys.setenv(EVDS_TOKEN = "your_api_key_here")
 ```
 
@@ -46,6 +49,7 @@ Sys.setenv(EVDS_TOKEN = "your_api_key_here")
 ### Loading the Package
 
 ``` r
+
 library(cbRt)
 library(dplyr)
 library(ggplot2)
@@ -56,6 +60,7 @@ library(ggplot2)
 Let’s retrieve the USD/TRY exchange rate data:
 
 ``` r
+
 # Get USD/TRY exchange rate (buying rate)
 usd_try <- cbrt_get(
   series = "TP.DK.USD.A",
@@ -77,6 +82,7 @@ You can retrieve multiple series at once. The package will automatically
 handle different frequencies:
 
 ``` r
+
 # Get multiple exchange rates
 exchange_rates <- cbrt_get(
   series = c("TP.DK.USD.A", "TP.DK.EUR.A", "TP.DK.GBP.A"),
@@ -107,6 +113,7 @@ Available formulas:
 ### Example: Percentage Changes
 
 ``` r
+
 # Get year-to-year percent change
 usd_try_yoy <- cbrt_get(
   series = "TP.DK.USD.A",
@@ -122,6 +129,7 @@ head(usd_try_yoy)
 ### Multiple Series with Different Formulas
 
 ``` r
+
 # Apply different formulas to different series
 data <- cbrt_get(
   series = c("TP.DK.USD.A", "TP.DK.EUR.A"),
@@ -140,6 +148,7 @@ The [`cbrt_meta()`](https://eremrah.com/cbRt/reference/cbrt_meta.md)
 function retrieves metadata for all available series:
 
 ``` r
+
 # Get all available series metadata
 metadata <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
 
@@ -166,6 +175,7 @@ package automatically handles this by:
 ### Example: Large Date Range
 
 ``` r
+
 # This will automatically be chunked
 usd_try_long <- cbrt_get(
   series = "TP.DK.USD.A",
@@ -184,6 +194,7 @@ nrow(usd_try_long)
 ## Data Visualization Example
 
 ``` r
+
 # Plot USD/TRY exchange rate
 usd_try %>%
   ggplot(aes(x = Date, y = TP.DK.USD.A)) +
@@ -205,6 +216,7 @@ By default,
 tibble, but you can specify other formats:
 
 ``` r
+
 # As tibble (default)
 data_tibble <- cbrt_get(
   series = "TP.DK.USD.A",
@@ -248,6 +260,7 @@ CBRT data sometimes includes “ND” (No Data) values. By default, these
 are converted to NA:
 
 ``` r
+
 # ND values are automatically converted to NA (default: nd = TRUE)
 data_with_na <- cbrt_get(
   series = "TP.DK.USD.A",

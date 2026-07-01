@@ -14,6 +14,7 @@ Thank you for considering contributing to this package!
 ### Setup
 
 ``` r
+
 # Install development dependencies
 install.packages("devtools")
 devtools::install_dev_deps()
@@ -27,6 +28,7 @@ devtools::install_dev_deps()
 4.  Run checks locally:
 
 ``` r
+
 devtools::document()  # Update documentation
 devtools::test()      # Run tests
 devtools::check()     # Run R CMD check

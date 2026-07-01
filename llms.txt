@@ -24,6 +24,7 @@ rates, and inflation indicators.
 Install the development version from GitHub:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("emraher/cbRt")
 ```
@@ -40,6 +41,7 @@ You need an API token from the CBRT EVDS system:
 Store your token securely in your `.Renviron` file:
 
 ``` r
+
 # Edit your .Renviron file
 usethis::edit_r_environ()
 
@@ -50,12 +52,14 @@ EVDS_TOKEN = "your_api_key_here"
 Alternatively, set it for the current session:
 
 ``` r
+
 Sys.setenv(EVDS_TOKEN = "your_api_key_here")
 ```
 
 ### Basic Usage
 
 ``` r
+
 library(cbRt)
 
 # Get USD/TRY exchange rate
@@ -84,6 +88,7 @@ Retrieve multiple series at once - the package handles different
 frequencies automatically:
 
 ``` r
+
 # Get multiple exchange rates
 exchange_rates <- cbrt_get(
   series = c("TP.DK.USD.A", "TP.DK.EUR.A", "TP.DK.GBP.A"),
@@ -107,6 +112,7 @@ head(exchange_rates)
 ### Applying Formulas
 
 ``` r
+
 # Get year-over-year percent change
 usd_try_yoy <- cbrt_get(
   series = "TP.DK.USD.A",
@@ -139,6 +145,7 @@ The package includes bundled metadata for all available series, so you
 can explore data offline:
 
 ``` r
+
 library(dplyr)
 library(stringr)
 
@@ -155,6 +162,7 @@ cbrt_meta_data %>%
 Or fetch the latest metadata directly from the API:
 
 ``` r
+
 # Get fresh metadata from API
 metadata <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
 
@@ -179,6 +187,7 @@ For large date ranges, the package:
 4.  Combines results transparently
 
 ``` r
+
 # This automatically chunks the request
 usd_try_long <- cbrt_get(
   series = "TP.DK.USD.A",
@@ -205,6 +214,7 @@ days, weekly, bi-monthly, monthly, quarterly, semi-annual, yearly.
 Choose your preferred output format:
 
 ``` r
+
 # Tibble (default) - for dplyr workflows
 data_tibble <- cbrt_get(series, start_date, end_date, as = "tibble")
 
@@ -238,6 +248,7 @@ data_dt <- cbrt_get(series, start_date, end_date, as = "data.table")
 If you use this package in your research, please cite:
 
 ``` r
+
 citation("cbRt")
 ```
 

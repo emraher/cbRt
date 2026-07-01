@@ -23,6 +23,7 @@ A data frame with metadata for all available series
 To update the bundled `cbrt_meta_data` dataset with fresh metadata from
 the API:
 
+
     cbrt_meta_data <- cbrt_meta(token = Sys.getenv("EVDS_TOKEN"))
     usethis::use_data(cbrt_meta_data, overwrite = TRUE)
 

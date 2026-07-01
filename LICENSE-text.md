@@ -1,4 +1,4 @@
 # License
 
-    YEAR: 2024
-    COPYRIGHT HOLDER: cbRt authors
+    YEAR: 2026
+    COPYRIGHT HOLDER: Emrah Er
